@@ -19,20 +19,20 @@ export default function Download() {
 
           <div className="space-y-4">
             <a
-              href="https://leadsgen-pro.shop/download/LeadsGenPro-Setup.exe"
+              href="/download/LeadsGenPro-Setup.exe"
               className="block gradient-bg text-white px-8 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-all hover-lift"
             >
               Download for Windows
             </a>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://leadsgen-pro.shop/download/LeadsGenPro-Mac.dmg"
+                href="/download/LeadsGenPro-Mac.dmg"
                 className="bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-all"
               >
                 Download for Mac
               </a>
               <a
-                href="https://leadsgen-pro.shop/download/LeadsGenPro-Linux.AppImage"
+                href="/download/LeadsGenPro-Linux.AppImage"
                 className="bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-all"
               >
                 Download for Linux
@@ -42,7 +42,7 @@ export default function Download() {
 
           <div className="mt-8 pt-8 border-t border-gray-200">
             <p className="text-sm text-gray-500">
-              Version 2.0.0 • Released Oct 2025 • 45MB
+              Version 2.0.0 • Released Oct 2025 • Windows: 94MB
             </p>
           </div>
         </div>
