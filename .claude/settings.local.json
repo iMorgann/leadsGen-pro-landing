@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/iRoot/Downloads/LeadsGen-Pro/license-server/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

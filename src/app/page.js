@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import VideoDemo from '@/components/VideoDemo';
 import Features from '@/components/Features';
 import Pricing from '@/components/Pricing';
 import Download from '@/components/Download';
@@ -11,6 +12,7 @@ export default function Home() {
     <main className="min-h-screen">
       <Navbar />
       <Hero />
+      <VideoDemo />
       <Features />
       <Pricing />
       <Download />

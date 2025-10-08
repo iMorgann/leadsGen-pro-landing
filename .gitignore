@@ -34,3 +34,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Large files - exclude from git
+public/assets/LeadsGen-Pro-Demonstration-video.mp4
+public/download/LeadsGenPro.zip
+public/download/*.zip
+public/download/*.exe
+public/download/**/*.exe

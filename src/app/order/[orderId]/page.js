@@ -31,8 +31,8 @@ export default function OrderStatusPage() {
       if (response.success) {
         setOrder(response.order);
 
-        // Stop polling if order is confirmed or rejected
-        if (response.order.status === 'confirmed' || response.order.status === 'rejected') {
+        // Stop polling if order is completed or rejected
+        if (response.order.status === 'completed' || response.order.status === 'rejected') {
           setPolling(false);
         }
       } else {
@@ -108,7 +108,7 @@ export default function OrderStatusPage() {
       bgColor: 'bg-blue-50',
       borderColor: 'border-blue-200'
     },
-    confirmed: {
+    completed: {
       icon: '✅',
       title: 'Payment Confirmed!',
       color: 'text-green-600',
@@ -161,7 +161,7 @@ export default function OrderStatusPage() {
               </div>
             )}
 
-            {order.status === 'confirmed' && (
+            {order.status === 'completed' && (
               <p className="text-gray-600">Your license is ready! Check your email or download below.</p>
             )}
 
@@ -206,8 +206,8 @@ export default function OrderStatusPage() {
             )}
           </div>
 
-          {/* License Key (if confirmed) */}
-          {order.status === 'confirmed' && order.license_key && (
+          {/* License Key (if completed) */}
+          {order.status === 'completed' && order.license_key && (
             <div className="bg-gradient-to-r from-primary-500 to-secondary-600 rounded-xl p-6 text-white mb-6">
               <h3 className="text-xl font-bold mb-4">Your License Key</h3>
               <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 mb-4">
@@ -232,7 +232,7 @@ export default function OrderStatusPage() {
 
           {/* Actions */}
           <div className="space-y-3">
-            {order.status === 'confirmed' && (
+            {order.status === 'completed' && (
               <a
                 href="#download"
                 className="block w-full gradient-bg text-white py-4 rounded-lg font-bold text-center hover:opacity-90 transition-all"
@@ -261,36 +261,42 @@ export default function OrderStatusPage() {
           </div>
         </div>
 
-        {/* Download Section (if confirmed) */}
-        {order.status === 'confirmed' && (
+        {/* Download Section (if completed) */}
+        {order.status === 'completed' && (
           <div id="download" className="bg-white rounded-2xl shadow-xl p-8">
             <h3 className="text-2xl font-bold mb-6 text-center">Download LeadsGen Pro</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <a
-                href="https://leadsgen-pro.shop/download/LeadsGenPro-Setup.exe"
+                href="https://leadsgen-pro.shop/download/LeadsGenPro.zip"
+                download
                 className="p-6 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:shadow-lg transition-all text-center"
               >
                 <div className="text-4xl mb-2">💻</div>
                 <div className="font-bold">Windows</div>
-                <div className="text-sm text-gray-500">Setup.exe</div>
+                <div className="text-sm text-gray-500">ZIP (92MB)</div>
               </a>
               <a
-                href="https://leadsgen-pro.shop/download/LeadsGenPro-Mac.dmg"
+                href="https://leadsgen-pro.shop/download/LeadsGenPro-Mac.zip"
+                download
                 className="p-6 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:shadow-lg transition-all text-center"
               >
                 <div className="text-4xl mb-2">🍎</div>
                 <div className="font-bold">macOS</div>
-                <div className="text-sm text-gray-500">.dmg</div>
+                <div className="text-sm text-gray-500">ZIP</div>
               </a>
               <a
-                href="https://leadsgen-pro.shop/download/LeadsGenPro-Linux.AppImage"
+                href="https://leadsgen-pro.shop/download/LeadsGenPro-Linux.zip"
+                download
                 className="p-6 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:shadow-lg transition-all text-center"
               >
                 <div className="text-4xl mb-2">🐧</div>
                 <div className="font-bold">Linux</div>
-                <div className="text-sm text-gray-500">.AppImage</div>
+                <div className="text-sm text-gray-500">ZIP</div>
               </a>
             </div>
+            <p className="text-center text-sm text-gray-500 mt-6">
+              📌 Extract the ZIP file and run the installer
+            </p>
           </div>
         )}
 

@@ -16,6 +16,8 @@ function CheckoutContent() {
     amount: searchParams.get('price') || 35
   });
   const [selectedCrypto, setSelectedCrypto] = useState(null);
+  const [availableNetworks, setAvailableNetworks] = useState([]);
+  const [selectedNetwork, setSelectedNetwork] = useState(null);
   const [cryptoAddresses, setCryptoAddresses] = useState([]);
   const [orderId, setOrderId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -29,12 +31,12 @@ function CheckoutContent() {
   };
 
   const cryptoOptions = [
-    { coin: 'USDC', icon: '💵', network: 'ERC20' },
-    { coin: 'USDT', icon: '💰', network: 'TRC20' },
-    { coin: 'SOL', icon: '◎', network: 'Solana' },
-    { coin: 'LTC', icon: 'Ł', network: 'Mainnet' },
-    { coin: 'BTC', icon: '₿', network: 'Mainnet' },
-    { coin: 'ETH', icon: 'Ξ', network: 'Mainnet' }
+    { coin: 'USDC', icon: '/assets/usdc.png', network: 'ERC20' },
+    { coin: 'USDT', icon: '/assets/usdt.png', network: 'TRC20' },
+    { coin: 'SOL', icon: '/assets/sol.png', network: 'Solana' },
+    { coin: 'LTC', icon: '/assets/ltc.png', network: 'Mainnet' },
+    { coin: 'BTC', icon: '/assets/btc.png', network: 'Mainnet' },
+    { coin: 'ETH', icon: '/assets/eth.png', network: 'Mainnet' }
   ];
 
   const handleEmailSubmit = (e) => {
@@ -51,6 +53,7 @@ function CheckoutContent() {
     setLoading(true);
 
     try {
+      // First, create order to get available networks for this coin
       const response = await api.createOrder({
         user_email: formData.email,
         plan_type: formData.plan_type,
@@ -61,7 +64,16 @@ function CheckoutContent() {
       if (response.success) {
         setOrderId(response.order.order_id);
         setCryptoAddresses(response.crypto_addresses);
-        setStep(3);
+
+        // If multiple networks available, show network selection (step 2.5)
+        if (response.crypto_addresses.length > 1) {
+          setAvailableNetworks(response.crypto_addresses);
+          setStep(2.5); // Network selection step
+        } else {
+          // Only one network, go directly to payment
+          setStep(3);
+        }
+
         toast.success('Order created successfully!');
       } else {
         toast.error(response.error || 'Failed to create order');
@@ -72,6 +84,14 @@ function CheckoutContent() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNetworkSelect = (network) => {
+    setSelectedNetwork(network);
+    // Filter crypto addresses to only show the selected network
+    const filteredAddresses = cryptoAddresses.filter(addr => addr.network === network);
+    setCryptoAddresses(filteredAddresses);
+    setStep(3);
   };
 
   const handleTxidSubmit = async (e) => {
@@ -200,9 +220,8 @@ function CheckoutContent() {
                     disabled={loading}
                     className="p-6 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:shadow-lg transition-all text-center disabled:opacity-50"
                   >
-                    <div className="text-4xl mb-2">{crypto.icon}</div>
+                    <img src={crypto.icon} alt={crypto.coin} className="w-16 h-16 mx-auto mb-2" />
                     <div className="font-bold text-lg">{crypto.coin}</div>
-                    <div className="text-sm text-gray-500">{crypto.network}</div>
                   </button>
                 ))}
               </div>
@@ -216,6 +235,38 @@ function CheckoutContent() {
 
               <button
                 onClick={() => setStep(1)}
+                className="w-full mt-6 bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-all"
+              >
+                Back
+              </button>
+            </div>
+          )}
+
+          {/* Step 2.5: Select Network (if multiple networks available) */}
+          {step === 2.5 && (
+            <div>
+              <h2 className="text-2xl font-bold mb-6">Select Network for {selectedCrypto?.coin}</h2>
+              <p className="text-gray-600 mb-6">This cryptocurrency is available on multiple networks. Please select your preferred network:</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {availableNetworks.map((networkAddr) => (
+                  <button
+                    key={networkAddr.network}
+                    onClick={() => handleNetworkSelect(networkAddr.network)}
+                    className="p-6 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:shadow-lg transition-all text-left"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <img src={selectedCrypto?.icon} alt={selectedCrypto?.coin} className="w-12 h-12" />
+                      <div className="font-bold text-lg gradient-text">{networkAddr.network}</div>
+                    </div>
+                    <div className="text-sm text-gray-600 mb-2">Network: {networkAddr.network}</div>
+                    <div className="text-xs text-gray-500 font-mono break-all">{networkAddr.address.substring(0, 30)}...</div>
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setStep(2)}
                 className="w-full mt-6 bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-all"
               >
                 Back
@@ -237,9 +288,16 @@ function CheckoutContent() {
               {cryptoAddresses.map((addr, index) => (
                 <div key={index} className="mb-6 p-6 bg-gray-50 rounded-xl">
                   <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="font-bold text-lg">{addr.coin}</h3>
-                      <p className="text-sm text-gray-600">{addr.network} Network</p>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={cryptoOptions.find(c => c.coin === addr.coin)?.icon}
+                        alt={addr.coin}
+                        className="w-12 h-12"
+                      />
+                      <div>
+                        <h3 className="font-bold text-lg">{addr.coin}</h3>
+                        <p className="text-sm text-gray-600">{addr.network} Network</p>
+                      </div>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold gradient-text">${formData.amount}</div>

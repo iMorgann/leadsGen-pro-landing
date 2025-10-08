@@ -1,34 +1,34 @@
 export default function Features() {
   const features = [
     {
+      icon: '🗺️',
+      title: 'Multi-Platform Extraction',
+      description: 'Extract business data from Google Maps, Yelp, Yellow Pages, DexKnows, Angi, Super Pages and more.'
+    },
+    {
+      icon: '📞',
+      title: 'Complete Business Data',
+      description: 'Collect business names, phone numbers, addresses, websites, categories, reviews, and operating hours.'
+    },
+    {
       icon: '🎯',
-      title: 'Targeted Lead Generation',
-      description: 'Find your ideal customers with advanced filtering and targeting capabilities.'
+      title: 'Keyword & Location Targeting',
+      description: 'Search for businesses by industry keywords and specific locations to find exactly what you need.'
     },
     {
-      icon: '✅',
-      title: 'Real-Time Validation',
-      description: 'Verify email addresses instantly with our built-in validation system.'
-    },
-    {
-      icon: '⚡',
-      title: 'Lightning Fast',
-      description: 'Generate thousands of leads in seconds with our optimized engine.'
+      icon: '📧',
+      title: 'Email Enrichment',
+      description: 'Automatically find and verify business email addresses with built-in email enrichment capabilities.'
     },
     {
       icon: '📊',
-      title: 'Advanced Analytics',
-      description: 'Track performance with detailed analytics and reporting tools.'
+      title: 'Multiple Export Formats',
+      description: 'Export your extracted data to Google Maps, XLSX, CSV and other formats for easy integration.'
     },
     {
-      icon: '🔄',
-      title: 'Automated Workflows',
-      description: 'Set up automated campaigns to save time and increase efficiency.'
-    },
-    {
-      icon: '🔒',
-      title: 'Secure & Compliant',
-      description: 'Enterprise-grade security with GDPR and data protection compliance.'
+      icon: '⚡',
+      title: 'Bulk Extraction',
+      description: 'Extract thousands of business records in minutes with our high-speed bulk extraction engine.'
     }
   ];
 
@@ -37,10 +37,10 @@ export default function Features() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Powerful Features for <span className="gradient-text">Lead Generation</span>
+            Powerful Features for <span className="gradient-text">Business Data Extraction</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Everything you need to find, validate, and convert high-quality leads
+            Everything you need to extract, enrich, and export business data from multiple platforms
           </p>
         </div>
 
