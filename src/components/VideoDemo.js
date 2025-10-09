@@ -1,8 +1,9 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 export default function VideoDemo() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
 
   const highlights = [
     {
@@ -53,6 +54,7 @@ export default function VideoDemo() {
           <div className="relative bg-gray-900 rounded-3xl shadow-2xl overflow-hidden">
             <div className="relative" style={{ paddingBottom: '56.25%' }}>
               <video
+                ref={videoRef}
                 className="absolute top-0 left-0 w-full h-full"
                 controls
                 poster="/assets/video-thumbnail.jpg"
@@ -66,7 +68,10 @@ export default function VideoDemo() {
 
               {/* Play Button Overlay */}
               {!isPlaying && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm cursor-pointer">
+                <div
+                  className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm cursor-pointer"
+                  onClick={() => videoRef.current?.play()}
+                >
                   <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform duration-300 pulse-glow">
                     <svg className="w-12 h-12 text-primary-600 ml-1" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z" />
