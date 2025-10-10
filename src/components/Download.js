@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 
 export default function Download() {
   const platforms = [
@@ -60,11 +61,14 @@ export default function Download() {
           <div className="relative bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-3xl mx-auto border border-gray-100">
             {/* Product Preview */}
             <div className="mb-10">
-              <div className="relative mb-6 rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-primary-500 transition-all shadow-xl group/img">
-                <img
+              <div className="relative mb-6 rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-primary-500 transition-all shadow-xl group/img aspect-video">
+                <Image
                   src="/assets/video-thumbnail.jpg"
-                  alt="LeadsGen Pro - Business Data Extraction Interface"
-                  className="w-full h-auto transform group-hover/img:scale-105 transition-transform duration-500"
+                  alt="LeadsGen Pro Business Data Extraction Software Interface - Extract contacts from Google Maps, Yelp, Yellow Pages"
+                  fill
+                  className="object-cover transform group-hover/img:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 768px"
+                  priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity" />
               </div>
