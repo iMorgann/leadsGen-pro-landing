@@ -1,12 +1,12 @@
 import './globals.css'
 
 export const metadata = {
-  metadataBase: new URL('https://leadsgen-pro.shop'),
+  metadataBase: new URL('https://www.leadsgen-pro.shop'),
   title: {
-    default: 'LeadsGen Pro - All-in-One Business Data Extraction Tool',
+    default: 'LeadsGen Pro v2.1 - Business Data Extraction Software | Google Maps, Yelp, Yellow Pages Scraper',
     template: '%s | LeadsGen Pro'
   },
-  description: 'Extract verified business contacts from Google Maps, Yelp, Yellow Pages & 11+ platforms. Email enrichment, phone numbers, complete profiles. 30-day money-back guarantee.',
+  description: 'Extract verified business contacts from Google Maps, Yelp, Yellow Pages & 11+ platforms. NEW: Email Enrichment V2. Phone numbers, complete profiles. Lifetime license available!',
   keywords: [
     'lead generation software',
     'business data extraction',
@@ -109,20 +109,21 @@ export default function RootLayout({ children }) {
         url: 'https://leadsgen-pro.shop/logo.png',
       },
     },
-    softwareVersion: '1.0.0',
-    screenshot: 'https://leadsgen-pro.shop/screenshot.png',
+    softwareVersion: '2.1.0',
+    screenshot: 'https://www.leadsgen-pro.shop/screenshot.png',
     featureList: [
       'Google Maps Scraper',
       'Yelp Business Extractor',
       'Yellow Pages Scraper',
-      'Email Enrichment',
+      'NEW: Email Enrichment V2',
       'Phone Number Lookup',
       'Instagram Profile Extractor',
       'Chamber of Commerce Data',
       'Proxy Support',
-      'Real-time Export',
-      'CAPTCHA Handling',
-      'Anti-Bot Detection',
+      'Real-time Export (CSV/Excel)',
+      'Multiple Browser Support',
+      'Bulk Data Processing',
+      'Lifetime License Option',
     ],
   }
 
