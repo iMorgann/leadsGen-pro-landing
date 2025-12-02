@@ -13,9 +13,9 @@ export default function Contact() {
     {
       icon: '💬',
       title: 'Telegram',
-      content: '@rootbck',
+      content: '@irootbck',
       description: 'Chat with us directly on Telegram',
-      link: 'https://t.me/rootbck',
+      link: 'https://t.me/irootbck',
       gradient: 'from-cyan-500 to-blue-600'
     },
     {

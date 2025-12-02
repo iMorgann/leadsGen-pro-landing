@@ -615,7 +615,7 @@ export default function Documentation() {
                   </p>
                   <div className="space-y-2 text-gray-700">
                     <p><strong>Email:</strong> <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700 font-semibold">support@leadsgen-pro.shop</a></p>
-                    <p><strong>Telegram:</strong> <a href="https://t.me/rootbck" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 font-semibold">@rootbck</a> (Fastest response)</p>
+                    <p><strong>Telegram:</strong> <a href="https://t.me/irootbck" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 font-semibold">@irootbck</a> (Fastest response)</p>
                     <p><strong>In-App:</strong> Help → Contact Support</p>
                   </div>
                   <p className="text-sm text-gray-600 mt-4">

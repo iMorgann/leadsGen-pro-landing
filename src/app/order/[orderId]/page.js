@@ -243,7 +243,7 @@ export default function OrderStatusPage() {
 
             {(order.status === 'rejected' || order.status === 'pending') && (
               <a
-                href="https://t.me/rootbck"
+                href="https://t.me/irootbck"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full gradient-bg text-white py-4 rounded-lg font-bold text-center hover:opacity-90 transition-all"
@@ -303,7 +303,7 @@ export default function OrderStatusPage() {
         {/* Help */}
         <div className="text-center mt-8 text-gray-600">
           <p>Need help? Contact us at <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:underline">support@leadsgen-pro.shop</a></p>
-          <p className="mt-2">or Telegram: <a href="https://t.me/rootbck" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">@rootbck</a></p>
+          <p className="mt-2">or Telegram: <a href="https://t.me/irootbck" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">@irootbck</a></p>
         </div>
       </div>
     </div>

@@ -203,7 +203,7 @@ export default function RefundPolicy() {
               <div className="space-y-2">
                 <p className="text-gray-700"><strong>Refund Requests:</strong> <a href="mailto:refunds@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">refunds@leadsgen-pro.shop</a></p>
                 <p className="text-gray-700"><strong>General Support:</strong> <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">support@leadsgen-pro.shop</a></p>
-                <p className="text-gray-700"><strong>Telegram:</strong> <a href="https://t.me/rootbck" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">@rootbck</a></p>
+                <p className="text-gray-700"><strong>Telegram:</strong> <a href="https://t.me/irootbck" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">@irootbck</a></p>
               </div>
             </div>
           </section>

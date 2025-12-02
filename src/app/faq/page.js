@@ -130,11 +130,11 @@ export default function FAQ() {
       questions: [
         {
           question: 'How do I contact support?',
-          answer: 'Reach us via: Email at support@leadsgen-pro.shop (24-48 hour response), Telegram at @rootbck (fastest response), or through the in-app Help > Contact Support feature. Premium and Business license holders get priority support with faster response times.'
+          answer: 'Reach us via: Email at support@leadsgen-pro.shop (24-48 hour response), Telegram at @irootbck (fastest response), or through the in-app Help > Contact Support feature. Premium and Business license holders get priority support with faster response times.'
         },
         {
           question: 'Do you offer live chat support?',
-          answer: 'We offer Telegram support for real-time assistance at @rootbck. For complex issues, we may schedule a screen-sharing session to help resolve your problem quickly. Business license holders can request dedicated support.'
+          answer: 'We offer Telegram support for real-time assistance at @irootbck. For complex issues, we may schedule a screen-sharing session to help resolve your problem quickly. Business license holders can request dedicated support.'
         },
         {
           question: 'Is there documentation or tutorials available?',
@@ -252,7 +252,7 @@ export default function FAQ() {
                 Email Support
               </a>
               <a
-                href="https://t.me/rootbck"
+                href="https://t.me/irootbck"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center bg-white text-primary-600 px-8 py-4 rounded-xl font-bold hover:shadow-xl transition-all border-2 border-primary-600 hover:bg-primary-50"

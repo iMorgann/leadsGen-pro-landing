@@ -186,7 +186,7 @@ Update contact details in:
 ## Support
 
 - Email: support@leadsgen-pro.shop
-- Telegram: @rootbck
+- Telegram: @irootbck
 
 ## License
 

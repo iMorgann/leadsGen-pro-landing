@@ -42,7 +42,7 @@ Your license key was sent to your email immediately after payment confirmation.
 **Didn't receive your license?**
 - Check your spam/junk folder
 - Contact support: support@leadsgen-pro.shop
-- Telegram: @rootbck
+- Telegram: @irootbck
 
 **License Key Format**: `LGPRO-XXXXX-XXXXX-XXXXX-XXXXX`
 
@@ -108,7 +108,7 @@ LeadsGen Pro will automatically download Chrome drivers on first run.
 ## 📞 Support
 
 - **Email**: support@leadsgen-pro.shop
-- **Telegram**: @rootbck
+- **Telegram**: @irootbck
 - **Website**: https://www.leadsgen-pro.shop
 - **Documentation**: https://www.leadsgen-pro.shop/docs
 

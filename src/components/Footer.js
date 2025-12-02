@@ -28,7 +28,7 @@ export default function Footer() {
             <ul className="space-y-2 text-blue-100">
               <li><a href="#contact" className="hover:text-white transition-colors">Contact Us</a></li>
               <li><a href="mailto:support@leadsgen-pro.shop" className="hover:text-white transition-colors">Email Support</a></li>
-              <li><a href="https://t.me/rootbck" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a></li>
+              <li><a href="https://t.me/irootbck" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a></li>
               <li><a href="/faq" className="hover:text-white transition-colors">FAQ</a></li>
             </ul>
           </div>
