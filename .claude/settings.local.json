@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Read(//c/Users/iRoot/Downloads/LeadsGen-Pro/license-server/**)"
+      "Read(//c/Users/iRoot/Downloads/LeadsGen-Pro/license-server/**)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
