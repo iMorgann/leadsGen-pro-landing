@@ -79,7 +79,8 @@ function CheckoutContent() {
         toast.error(response.error || 'Failed to create order');
       }
     } catch (error) {
-      toast.error('Failed to create order. Please try again.');
+      const msg = error.response?.data?.error || 'Failed to create order. Please try again.';
+      toast.error(msg);
       console.error(error);
     } finally {
       setLoading(false);
@@ -125,7 +126,7 @@ function CheckoutContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 text-gray-900">
       <Toaster position="top-center" />
 
       <div className="max-w-3xl mx-auto">
@@ -186,7 +187,7 @@ function CheckoutContent() {
                   </label>
                   <input
                     type="email"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary-500 focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary-500 focus:outline-none text-gray-900 bg-white"
                     placeholder="your@email.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -334,7 +335,7 @@ function CheckoutContent() {
                 <input
                   type="text"
                   name="txid"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary-500 focus:outline-none mb-4"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary-500 focus:outline-none mb-4 text-gray-900 bg-white"
                   placeholder="Enter your transaction ID after payment"
                   required
                 />

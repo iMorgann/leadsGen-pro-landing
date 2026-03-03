@@ -69,7 +69,7 @@ export default function OrderStatusPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 mb-4"></div>
           <p className="text-gray-600">Loading order...</p>
@@ -80,7 +80,7 @@ export default function OrderStatusPage() {
 
   if (!order) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900">
         <div className="text-center">
           <div className="text-6xl mb-4">❌</div>
           <h1 className="text-2xl font-bold mb-2">Order Not Found</h1>
@@ -127,7 +127,7 @@ export default function OrderStatusPage() {
   const status = statusConfig[order.status] || statusConfig.pending;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 text-gray-900">
       <Toaster position="top-center" />
 
       <div className="max-w-3xl mx-auto">

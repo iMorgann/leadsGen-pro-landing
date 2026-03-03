@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://license.leadsgen-pro.shop';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://leadgen-pro-production.up.railway.app';
 
 export const api = {
   // Payment APIs
