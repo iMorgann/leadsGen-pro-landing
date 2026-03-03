@@ -1,170 +1,225 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+// Platform nodes for outer ring (8 nodes at 45° intervals)
+const OUTER_NODES = [
+  { label: 'Google Maps', icon: '🗺️', angle: 0 },
+  { label: 'Yelp',        icon: '⭐', angle: 45 },
+  { label: 'Yellow Pages',icon: '📒', angle: 90 },
+  { label: 'BBB',         icon: '🏆', angle: 135 },
+  { label: 'Houzz',       icon: '🏠', angle: 180 },
+  { label: 'TripAdvisor', icon: '✈️', angle: 225 },
+  { label: 'Angi',        icon: '🔧', angle: 270 },
+  { label: 'Manta',       icon: '🌐', angle: 315 },
+];
+
+// Platform nodes for inner ring (4 nodes at 90° intervals)
+const INNER_NODES = [
+  { label: 'Thumbtack',   icon: '📌', angle: 0 },
+  { label: 'SuperPages',  icon: '📱', angle: 90 },
+  { label: 'DexKnows',    icon: '📞', angle: 180 },
+  { label: 'Emails+Ph',   icon: '📧', angle: 270 },
+];
+
 export default function Hero() {
-  const [count1, setCount1] = useState(0);
-  const [count2, setCount2] = useState(0);
-  const [count3, setCount3] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [outerAngle, setOuterAngle] = useState(0);
+  const [innerAngle, setInnerAngle] = useState(0);
 
   useEffect(() => {
     setIsVisible(true);
 
-    // Animated counters
-    const animateCounter = (setter, target, duration = 2000) => {
-      const steps = 60;
-      const increment = target / steps;
-      let current = 0;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          setter(target);
-          clearInterval(timer);
-        } else {
-          setter(Math.floor(current));
-        }
-      }, duration / steps);
+    // Animate orbital rings via requestAnimationFrame
+    let lastTime = null;
+    let raf;
+
+    const animate = (time) => {
+      if (lastTime !== null) {
+        const delta = time - lastTime;
+        setOuterAngle((prev) => (prev + delta * 0.006) % 360);   // 30s full rotation
+        setInnerAngle((prev) => (prev - delta * 0.009) % 360);   // 20s full rotation, reverse
+      }
+      lastTime = time;
+      raf = requestAnimationFrame(animate);
     };
 
-    setTimeout(() => {
-      animateCounter(setCount1, 6);
-      animateCounter(setCount2, 1000);
-      animateCounter(setCount3, 10);
-    }, 500);
+    raf = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
-  const scrollToPricing = () => {
-    document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const toRad = (deg) => (deg * Math.PI) / 180;
 
-  // Generate particles
-  const particles = Array.from({ length: 30 }, (_, i) => ({
-    id: i,
-    size: Math.random() * 6 + 2,
-    left: Math.random() * 100,
-    delay: Math.random() * 20,
-    duration: Math.random() * 10 + 15
-  }));
+  // Compute (x, y) for a node on a ring of given radius at given angle
+  const nodePos = (angle, radius) => ({
+    x: Math.cos(toRad(angle - 90)) * radius,
+    y: Math.sin(toRad(angle - 90)) * radius,
+  });
 
   return (
-    <section className="relative gradient-bg text-white py-24 px-4 overflow-hidden min-h-screen flex items-center">
-      {/* Animated Particles Background */}
-      <div className="particles-bg">
-        {particles.map((particle) => (
-          <div
-            key={particle.id}
-            className="particle"
-            style={{
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
-              left: `${particle.left}%`,
-              animationDelay: `${particle.delay}s`,
-              animationDuration: `${particle.duration}s`
-            }}
-          />
-        ))}
-      </div>
+    <section className="relative min-h-screen flex items-center bg-[#0a0a14] overflow-hidden pt-16">
+      {/* Background glows */}
+      <div className="hero-glow-amber" />
+      <div className="hero-glow-purple" />
 
-      {/* Gradient Mesh Overlay */}
-      <div className="absolute inset-0 gradient-mesh opacity-50" />
+      {/* Subtle grid overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(139,92,246,1) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,1) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }}
+      />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center">
-          {/* Main Heading */}
-          <h1 className={`text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight transition-all duration-1000 ${isVisible ? 'fade-in-up' : 'opacity-0'}`}>
-            Extract Business Data
-            <br />
-            <span className="text-blue-200 inline-block mt-2">
-              From Multiple Platforms
-            </span>
-          </h1>
+      <div className="max-w-7xl mx-auto px-6 py-20 relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-          {/* Subheading */}
-          <p className={`text-xl md:text-2xl mb-12 text-blue-100 max-w-4xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'fade-in-up stagger-2' : 'opacity-0'}`}>
-            Powerful business information extractor that scrapes Google Maps, Yelp, Yellow Pages and more.
-            Get verified business contacts, emails, and complete profiles in seconds.
-          </p>
+          {/* ── Left Column ─────────────────────────────── */}
+          <div className={`transition-all duration-1000 ${isVisible ? 'fade-in-up' : 'opacity-0'}`}>
 
-          {/* CTA Buttons */}
-          <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center mb-20 transition-all duration-1000 delay-300 ${isVisible ? 'fade-in-up stagger-3' : 'opacity-0'}`}>
-            <button
-              onClick={scrollToPricing}
-              className="group relative bg-white text-primary-600 px-10 py-5 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all hover-lift shadow-2xl overflow-hidden"
-            >
-              <span className="relative z-10">Get Started Now</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-secondary-500 opacity-0 group-hover:opacity-10 transition-opacity" />
-            </button>
-            <a
-              href="#features"
-              className="group glass-effect text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-white/20 transition-all hover-lift border-2 border-white/30"
-            >
-              <span className="flex items-center gap-2">
-                Learn More
+            {/* Version pill */}
+            <div className="inline-flex items-center gap-2 bg-purple-900/30 border border-purple-700/40 rounded-full px-4 py-1.5 mb-8">
+              <span className="text-sm">🚀</span>
+              <span className="text-sm font-semibold text-purple-300">v2.1.0 — Now with 17+ Scrapers</span>
+            </div>
+
+            {/* Headline */}
+            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+              Extract Business Leads
+              <br />
+              <span className="text-gray-200">From Any Platform —</span>
+              <br />
+              <span className="gradient-text">Automated & Precise</span>
+            </h1>
+
+            {/* Subtext */}
+            <p className="text-lg text-gray-400 leading-relaxed mb-10 max-w-xl">
+              17 scraper sources. Dual-browser extraction. Real-time results.
+              Export to XLSX, CSV, and TXT instantly.
+            </p>
+
+            {/* CTA buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <a
+                href="#download"
+                className="group inline-flex items-center justify-center gap-2 bg-[#1a1040] border border-purple-500/60 hover:border-purple-400 text-white font-bold px-8 py-4 rounded-xl transition-all duration-200 hover:bg-[#201450] hover:shadow-xl hover:shadow-purple-900/30 text-lg"
+              >
+                Download Free Trial
                 <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-              </span>
-            </a>
-          </div>
-
-          {/* Animated Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-            <div className={`glass-effect p-8 rounded-2xl hover-lift card-shadow-lg transition-all duration-1000 delay-400 ${isVisible ? 'scale-in stagger-4' : 'opacity-0'}`}>
-              <div className="text-5xl md:text-6xl font-bold mb-3 text-white">
-                {count1}+
-              </div>
-              <div className="text-blue-100 text-lg">Data Platforms Supported</div>
-              <div className="mt-3 text-sm text-blue-200">
-                Google Maps, Yelp, Yellow Pages & more
-              </div>
+              </a>
+              <a
+                href="#pricing"
+                className="inline-flex items-center justify-center gap-2 text-gray-400 hover:text-white font-medium px-8 py-4 rounded-xl transition-colors duration-200 text-lg border border-transparent hover:border-white/10"
+              >
+                View Pricing
+              </a>
             </div>
 
-            <div className={`glass-effect p-8 rounded-2xl hover-lift card-shadow-lg shimmer transition-all duration-1000 delay-500 ${isVisible ? 'scale-in stagger-5' : 'opacity-0'}`}>
-              <div className="text-5xl md:text-6xl font-bold mb-3 text-white">
-                {count2.toLocaleString()}s
-              </div>
-              <div className="text-blue-100 text-lg">Businesses Extracted/Min</div>
-              <div className="mt-3 text-sm text-blue-200">
-                Lightning-fast bulk extraction
-              </div>
-            </div>
-
-            <div className={`glass-effect p-8 rounded-2xl hover-lift card-shadow-lg transition-all duration-1000 delay-600 ${isVisible ? 'scale-in stagger-6' : 'opacity-0'}`}>
-              <div className="text-5xl md:text-6xl font-bold mb-3 text-white">
-                {count3}+
-              </div>
-              <div className="text-blue-100 text-lg">Data Fields Per Business</div>
-              <div className="mt-3 text-sm text-blue-200">
-                Complete business profiles
-              </div>
+            {/* Trust strip */}
+            <div className="flex flex-wrap items-center gap-2 text-gray-600 text-sm">
+              <span className="text-gray-500 font-medium text-xs uppercase tracking-wider">Supported Platforms:</span>
+              {['Google Maps', 'Yelp', 'Yellow Pages', 'BBB', 'Houzz', 'TripAdvisor'].map((p, i, arr) => (
+                <span key={p} className="flex items-center gap-2">
+                  <span className="text-gray-400">{p}</span>
+                  {i < arr.length - 1 && <span className="text-gray-700">·</span>}
+                </span>
+              ))}
+              <span className="text-gray-700">·</span>
+              <span className="text-purple-500 font-semibold">+11 more</span>
             </div>
           </div>
 
-          {/* Floating Action Indicators */}
-          <div className={`mt-16 transition-all duration-1000 delay-700 ${isVisible ? 'fade-in' : 'opacity-0'}`}>
-            <div className="flex justify-center items-center gap-3 text-blue-200">
-              <div className="flex -space-x-2">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border-2 border-white/40 font-bold">
-                  🗺️
-                </div>
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border-2 border-white/40 font-bold">
-                  📧
-                </div>
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border-2 border-white/40 font-bold">
-                  📊
+          {/* ── Right Column — Orbital ───────────────────── */}
+          <div className={`flex justify-center transition-all duration-1000 delay-300 ${isVisible ? 'fade-in-right' : 'opacity-0'}`}>
+            <div className="relative" style={{ width: 480, height: 480 }}>
+
+              {/* Outer ring SVG glow */}
+              <svg
+                className="absolute inset-0 w-full h-full"
+                viewBox="0 0 480 480"
+                fill="none"
+              >
+                <circle cx="240" cy="240" r="220" stroke="rgba(139,92,246,0.2)" strokeWidth="1" />
+                <circle cx="240" cy="240" r="140" stroke="rgba(139,92,246,0.15)" strokeWidth="1" />
+                <circle cx="240" cy="240" r="60"  stroke="rgba(139,92,246,0.25)" strokeWidth="1.5" fill="rgba(124,58,237,0.06)" />
+              </svg>
+
+              {/* Center stat */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                <div className="bg-[#12102a]/90 border border-purple-700/40 rounded-2xl px-6 py-5 text-center shadow-xl shadow-purple-900/20">
+                  <div className="text-5xl font-bold text-white leading-none">17+</div>
+                  <div className="text-gray-400 text-sm mt-1 font-medium">Platforms</div>
+                  <div className="mt-3 flex items-center gap-1.5 justify-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                    <span className="text-xs text-green-400 font-medium">Live Results</span>
+                  </div>
                 </div>
               </div>
-              <span className="text-sm font-medium">Trusted by thousands of businesses worldwide</span>
+
+              {/* Outer ring nodes */}
+              {OUTER_NODES.map(({ label, icon, angle }) => {
+                const currentAngle = (angle + outerAngle) % 360;
+                const { x, y } = nodePos(currentAngle, 220);
+                return (
+                  <div
+                    key={label}
+                    className="absolute flex flex-col items-center gap-1 z-20"
+                    style={{
+                      left: `calc(50% + ${x}px)`,
+                      top:  `calc(50% + ${y}px)`,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  >
+                    <div className="w-10 h-10 bg-[#1a1040] border border-purple-600/40 rounded-xl flex items-center justify-center text-lg shadow-lg shadow-purple-900/30 hover:border-purple-400/60 transition-colors">
+                      {icon}
+                    </div>
+                    <span className="text-[9px] text-gray-500 font-medium whitespace-nowrap leading-none">{label}</span>
+                  </div>
+                );
+              })}
+
+              {/* Inner ring nodes */}
+              {INNER_NODES.map(({ label, icon, angle }) => {
+                const currentAngle = (angle + innerAngle) % 360;
+                const { x, y } = nodePos(currentAngle, 140);
+                return (
+                  <div
+                    key={label}
+                    className="absolute flex flex-col items-center gap-1 z-20"
+                    style={{
+                      left: `calc(50% + ${x}px)`,
+                      top:  `calc(50% + ${y}px)`,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  >
+                    <div className="w-8 h-8 bg-[#12102a] border border-purple-700/30 rounded-lg flex items-center justify-center text-sm shadow-md">
+                      {icon}
+                    </div>
+                    <span className="text-[8px] text-gray-600 font-medium whitespace-nowrap leading-none">{label}</span>
+                  </div>
+                );
+              })}
+
+              {/* Floating badge */}
+              <div className="absolute bottom-6 left-0 z-30">
+                <div className="inline-flex items-center gap-2 bg-purple-900/40 border border-purple-600/40 rounded-full px-3 py-1.5 backdrop-blur-sm">
+                  <span className="w-2 h-2 rounded-full bg-purple-400" />
+                  <span className="text-xs text-purple-300 font-semibold">Live Results Table</span>
+                </div>
+              </div>
+
+              {/* Corner accent badge */}
+              <div className="absolute top-4 right-0 z-30">
+                <div className="inline-flex items-center gap-2 bg-[#0d0520]/70 border border-purple-700/30 rounded-full px-3 py-1.5 backdrop-blur-sm">
+                  <span className="text-xs text-gray-400">Dual-Browser</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <svg className="w-6 h-6 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-        </svg>
       </div>
     </section>
   );

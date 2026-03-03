@@ -9,23 +9,45 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: '#f5f7ff',
-          100: '#ebf0fe',
-          200: '#d6e0fd',
-          300: '#b3c5fb',
-          400: '#8aa1f8',
-          500: '#667eea',
-          600: '#5568d3',
-          700: '#4553b8',
-          800: '#3a4794',
-          900: '#323d78',
+          DEFAULT: '#7c3aed',
+          light: '#a855f7',
+          dark: '#5b21b6',
+          50: '#f5f3ff',
+          100: '#ede9fe',
+          200: '#ddd6fe',
+          300: '#c4b5fd',
+          400: '#a78bfa',
+          500: '#8b5cf6',
+          600: '#7c3aed',
+          700: '#6d28d9',
+          800: '#5b21b6',
+          900: '#4c1d95',
         },
-        secondary: {
-          500: '#764ba2',
-          600: '#653a8f',
-          700: '#542a7c',
-        }
-      }
+        dark: {
+          base: '#0a0a14',
+          deep: '#0d0520',
+          card: '#12102a',
+          border: '#1e1b3a',
+        },
+        amber: {
+          glow: '#f59e0b',
+        },
+      },
+      fontFamily: {
+        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+      },
+      animation: {
+        'spin-slow': 'spin-slow 30s linear infinite',
+        'spin-slow-reverse': 'spin-slow 20s linear infinite reverse',
+        'orbit-cw': 'orbit-cw 25s linear infinite',
+        'orbit-ccw': 'orbit-ccw 20s linear infinite',
+      },
+      keyframes: {
+        'spin-slow': {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
+      },
     },
   },
   plugins: [],
