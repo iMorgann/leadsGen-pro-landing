@@ -16,7 +16,7 @@ export default function Download() {
     {
       name: 'Windows',
       icon: '🪟',
-      size: '299MB',
+      size: '300MB',
       link: '/download/LeadsGenPro-v2.1.0-Dist.zip',
       primary: true,
       version: 'v2.1.0',
