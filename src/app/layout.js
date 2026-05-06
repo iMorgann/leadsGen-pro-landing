@@ -1,7 +1,7 @@
 import './globals.css'
 
 export const metadata = {
-  metadataBase: new URL('https://www.leadsgen-pro.shop'),
+  metadataBase: new URL('https://leads.thezettahub.com'),
   title: {
     default: 'LeadsGen Pro v2.1 - Business Data Extraction Software | Google Maps, Yelp, Yellow Pages Scraper',
     template: '%s | LeadsGen Pro'
@@ -41,7 +41,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://leadsgen-pro.shop',
+    url: 'https://leads.thezettahub.com',
     siteName: 'LeadsGen Pro',
     title: 'LeadsGen Pro - Extract Business Data from 11+ Platforms',
     description: 'Professional business data extraction tool. Scrape verified contacts, emails, and phone numbers from Google Maps, Yelp, Yellow Pages & more. Email enrichment included.',
@@ -63,7 +63,7 @@ export const metadata = {
     creator: '@leadsgen_pro',
   },
   alternates: {
-    canonical: 'https://leadsgen-pro.shop',
+    canonical: 'https://leads.thezettahub.com',
   },
   verification: {
     google: 'your-google-verification-code',
@@ -94,23 +94,23 @@ export default function RootLayout({ children }) {
       worstRating: '1',
     },
     description: 'Professional business data extraction software that extracts verified contacts, emails, and complete business profiles from Google Maps, Yelp, Yellow Pages, and 11+ platforms.',
-    image: 'https://leadsgen-pro.shop/og-image.png',
-    url: 'https://leadsgen-pro.shop',
+    image: 'https://leads.thezettahub.com/og-image.png',
+    url: 'https://leads.thezettahub.com',
     author: {
       '@type': 'Organization',
       name: 'LeadsGen Pro',
-      url: 'https://leadsgen-pro.shop',
+      url: 'https://leads.thezettahub.com',
     },
     publisher: {
       '@type': 'Organization',
       name: 'LeadsGen Pro',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://leadsgen-pro.shop/logo.png',
+        url: 'https://leads.thezettahub.com/logo.png',
       },
     },
     softwareVersion: '2.1.0',
-    screenshot: 'https://www.leadsgen-pro.shop/screenshot.png',
+    screenshot: 'https://leads.thezettahub.com/screenshot.png',
     featureList: [
       'Google Maps Scraper',
       'Yelp Business Extractor',

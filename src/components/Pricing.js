@@ -1,275 +1,209 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+/**
+ * Pricing — dark + purple bracketed aesthetic.
+ *
+ * Layout
+ *  - Section header with `}` glyph and PRICING superscript index
+ *  - Five plan cards in a responsive grid (3 cols on lg, 2 on md, 1 on sm)
+ *  - "Most popular" plan gets a purple ring + glow
+ *  - "Lifetime" plan gets a subtle amber accent
+ */
+const PLANS = [
+  {
+    name: '1 Month',
+    price: 35,
+    plan_type: '1_month',
+    tag: '01',
+    blurb: 'Try the full toolset for a full month.',
+    features: [
+      'All 3 active scrapers',
+      'Telegram bot remote control',
+      'CSV / XLSX export',
+      'Email support',
+    ],
+  },
+  {
+    name: '3 Months',
+    price: 95,
+    plan_type: '3_months',
+    tag: '02',
+    badge: 'Save $10',
+    popular: true,
+    blurb: 'Most popular for teams running weekly campaigns.',
+    features: [
+      'Everything in 1 Month',
+      'Concurrent search engines',
+      'Advanced dork templates',
+      'Priority support',
+    ],
+  },
+  {
+    name: '6 Months',
+    price: 170,
+    plan_type: '6_months',
+    tag: '03',
+    badge: 'Save $40',
+    blurb: 'Six months of campaigns, with deeper support.',
+    features: [
+      'Everything in 3 Months',
+      'Common Crawl + WARC cache',
+      'Custom integration help',
+      'Telegram support channel',
+    ],
+  },
+  {
+    name: '1 Year',
+    price: 250,
+    plan_type: '1_year',
+    tag: '04',
+    badge: 'Save $170',
+    blurb: 'Best annual rate — locked-in updates included.',
+    features: [
+      'Everything in 6 Months',
+      'All future v2.x updates',
+      'Setup walkthrough call',
+      'SLA-grade response',
+    ],
+  },
+  {
+    name: 'Lifetime',
+    price: 450,
+    plan_type: 'lifetime',
+    tag: '05',
+    badge: 'Best value',
+    accent: 'amber',
+    blurb: 'Pay once, scrape forever.',
+    features: [
+      'Every feature, forever',
+      'All lifetime updates',
+      'VIP support queue',
+      'Early access to v3.x beta',
+    ],
+  },
+];
 
 export default function Pricing() {
   const router = useRouter();
-  const [hoveredPlan, setHoveredPlan] = useState(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [show, setShow] = useState(false);
+  useEffect(() => setShow(true), []);
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  const plans = [
-    {
-      name: '1 Month',
-      price: 35,
-      duration: '1 month',
-      plan_type: '1_month',
-      icon: '🚀',
-      color: 'blue',
-      features: [
-        'Unlimited lead generation',
-        'Email validation',
-        'Export to CSV/Excel',
-        'Basic analytics',
-        'Email support'
-      ]
-    },
-    {
-      name: '3 Months',
-      price: 95,
-      duration: '3 months',
-      plan_type: '3_months',
-      popular: true,
-      savings: 'Save $10',
-      icon: '⭐',
-      color: 'purple',
-      features: [
-        'Everything in 1 Month',
-        'Advanced analytics',
-        'API access',
-        'Priority support',
-        'Custom integrations'
-      ]
-    },
-    {
-      name: '6 Months',
-      price: 170,
-      duration: '6 months',
-      plan_type: '6_months',
-      savings: 'Save $40',
-      icon: '💎',
-      color: 'indigo',
-      features: [
-        'Everything in 3 Months',
-        'Dedicated account manager',
-        'White-label options',
-        'Advanced API features',
-        '24/7 phone support'
-      ]
-    },
-    {
-      name: '1 Year',
-      price: 250,
-      duration: '1 year',
-      plan_type: '1_year',
-      savings: 'Save $170',
-      icon: '🔥',
-      color: 'pink',
-      features: [
-        'Everything in 6 Months',
-        'Unlimited API calls',
-        'Custom development',
-        'Training sessions',
-        'SLA guarantee'
-      ]
-    },
-    {
-      name: 'Lifetime',
-      price: 450,
-      duration: 'forever',
-      plan_type: 'lifetime',
-      savings: 'Best Value',
-      icon: '👑',
-      color: 'amber',
-      features: [
-        'All features included',
-        'Lifetime updates',
-        'VIP support',
-        'Early access to new features',
-        'No recurring payments'
-      ]
-    }
-  ];
-
-  const handleBuyNow = (plan) => {
+  const goToCheckout = (plan) => {
     router.push(`/checkout?plan=${plan.plan_type}&price=${plan.price}`);
   };
 
   return (
-    <section id="pricing" className="py-24 px-4 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-      {/* Background Decoration */}
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-5xl h-96 bg-gradient-to-r from-primary-200 to-secondary-200 rounded-full filter blur-3xl opacity-20" />
+    <section id="pricing" className="relative overflow-hidden bg-dark-base py-24 text-white">
+      {/* Glow accent */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute top-0 left-1/2 h-[700px] w-[900px] -translate-x-1/2 -translate-y-1/3 rounded-full
+                        bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.30),transparent_70%)]" />
+      </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-20">
-          <div className="inline-block mb-4">
-            <span className="gradient-bg text-white px-6 py-2 rounded-full text-sm font-bold shimmer">
-              PRICING PLANS
-            </span>
-          </div>
-          <h2 className={`text-4xl md:text-6xl font-bold mb-6 transition-all duration-1000 ${isVisible ? 'fade-in-up' : 'opacity-0'}`}>
-            Simple, <span className="gradient-text">Transparent Pricing</span>
-          </h2>
-          <p className={`text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-200 ${isVisible ? 'fade-in-up stagger-2' : 'opacity-0'}`}>
-            Choose the plan that fits your business needs. All plans include core features with premium support.
+      <div className="relative z-10 mx-auto max-w-[1280px] px-6 md:px-12">
+        <header className={`mb-14 max-w-3xl transition-all duration-700 ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'}`}>
+          <p className="mb-4 text-[12px] font-medium tracking-[0.22em] text-primary-300">
+            PRICING
+            <sup className="ml-1 -translate-y-1 text-[9px] tracking-normal text-white/45">09</sup>
           </p>
-        </div>
+          <h2 className="text-balance text-4xl font-light leading-tight md:text-5xl">
+            <span className="text-primary-300">{'}'}</span> Simple, transparent
+            <span className="text-white/95"> licenses</span>
+          </h2>
+          <p className="mt-4 max-w-xl text-white/65">
+            Pick a window or pay once. All plans include the desktop app, the
+            Telegram bot, lifetime activations, and unlimited campaigns.
+          </p>
+        </header>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          {plans.map((plan, index) => (
-            <div
-              key={index}
-              onMouseEnter={() => setHoveredPlan(index)}
-              onMouseLeave={() => setHoveredPlan(null)}
-              className={`relative bg-white rounded-3xl p-8 border-2 transition-all duration-500 group
-                ${plan.popular ? 'border-primary-500 shadow-2xl scale-105' : 'border-gray-200 shadow-lg hover-lift'}
-                ${isVisible ? 'fade-in-up' : 'opacity-0'}
-              `}
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              {/* Popular Badge */}
-              {plan.popular && (
-                <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-20">
-                  <span className="gradient-bg text-white px-5 py-2 rounded-full text-sm font-bold shadow-xl shimmer whitespace-nowrap">
-                    ⚡ Most Popular
-                  </span>
-                </div>
-              )}
-
-              {/* Savings Badge */}
-              {plan.savings && !plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                  <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
-                    💰 {plan.savings}
-                  </span>
-                </div>
-              )}
-
-              {/* Gradient Background on Hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-              {/* Content */}
-              <div className="relative z-10">
-                {/* Icon */}
-                <div className="text-center mb-6">
-                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${plan.popular ? 'from-primary-400 to-secondary-500' : 'from-gray-100 to-gray-200'} mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <span className="text-3xl">{plan.icon}</span>
-                  </div>
-                  <h3 className="text-2xl font-bold mb-3 group-hover:text-primary-600 transition-colors">
-                    {plan.name}
-                  </h3>
-                </div>
-
-                {/* Price */}
-                <div className="text-center mb-8">
-                  <div className="flex items-start justify-center mb-2">
-                    <span className="text-2xl font-bold mt-2">$</span>
-                    <span className={`text-6xl font-bold gradient-text transition-all duration-300 ${hoveredPlan === index ? 'scale-110' : ''}`}>
-                      {plan.price}
-                    </span>
-                  </div>
-                  <p className="text-gray-500 font-medium">for {plan.duration}</p>
-                  {plan.popular && (
-                    <div className="mt-2">
-                      <span className="text-xs bg-primary-100 text-primary-700 px-3 py-1 rounded-full font-bold">
-                        Best ROI
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Features */}
-                <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-start gap-3 group/item"
-                      style={{
-                        transitionDelay: `${idx * 50}ms`,
-                        opacity: hoveredPlan === index ? 1 : 0.8
-                      }}
-                    >
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center mt-0.5">
-                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <span className="text-gray-700 text-sm leading-relaxed group-hover/item:text-gray-900 transition-colors">
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* CTA Button */}
-                <button
-                  onClick={() => handleBuyNow(plan)}
-                  className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 relative overflow-hidden group/btn ${
-                    plan.popular
-                      ? 'gradient-bg text-white shadow-xl hover:shadow-2xl hover-glow'
-                      : 'bg-gray-100 text-gray-900 hover:bg-gray-900 hover:text-white'
-                  }`}
-                >
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    Buy Now
-                    <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                  {!plan.popular && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-secondary-600 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                  )}
-                </button>
-              </div>
-
-              {/* Floating Corner Decoration */}
-              <div className={`absolute -top-1 -right-1 w-20 h-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}>
-                <div className="w-full h-full bg-gradient-to-br from-primary-400 to-secondary-500 rounded-full filter blur-xl" />
-              </div>
-            </div>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {PLANS.map((plan) => (
+            <PlanCard
+              key={plan.plan_type}
+              plan={plan}
+              onChoose={() => goToCheckout(plan)}
+            />
           ))}
         </div>
 
-        {/* Payment Info */}
-        <div className="text-center mt-16">
-          <div className="inline-flex flex-col md:flex-row items-center gap-4 bg-white px-8 py-6 rounded-2xl shadow-lg border border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-secondary-500 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <div className="text-left">
-                <p className="font-bold text-gray-900">Secure Payments</p>
-                <p className="text-sm text-gray-600">Cryptocurrency supported</p>
-              </div>
-            </div>
-            <div className="hidden md:block w-px h-10 bg-gray-300" />
-            <div className="flex gap-2 text-xs text-gray-500">
-              <span className="px-3 py-1 bg-gray-100 rounded-full font-medium">USDC</span>
-              <span className="px-3 py-1 bg-gray-100 rounded-full font-medium">USDT</span>
-              <span className="px-3 py-1 bg-gray-100 rounded-full font-medium">SOL</span>
-              <span className="px-3 py-1 bg-gray-100 rounded-full font-medium">BTC</span>
-              <span className="px-3 py-1 bg-gray-100 rounded-full font-medium">ETH</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Money Back Guarantee */}
-        <div className="text-center mt-8">
-          <div className="inline-flex items-center gap-2 text-sm text-gray-600">
-            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>30-day money-back guarantee on all plans</span>
-          </div>
-        </div>
+        <p className="mt-10 text-center text-xs tracking-[0.18em] text-white/45">
+          USD · LIFETIME ACTIVATIONS · 30-DAY MONEY-BACK · TAX INCLUDED WHERE APPLICABLE
+        </p>
       </div>
     </section>
+  );
+}
+
+/* ---------- card ---------- */
+
+function PlanCard({ plan, onChoose }) {
+  const isPopular = !!plan.popular;
+  const isAmber = plan.accent === 'amber';
+
+  return (
+    <div
+      className={`group relative flex flex-col overflow-hidden rounded-3xl
+                  bg-dark-card/95 p-7 ring-1 transition
+                  ${isPopular
+                    ? 'ring-primary-400/60 shadow-[0_0_40px_-10px_rgba(168,85,247,0.55)]'
+                    : isAmber
+                      ? 'ring-amber-glow/40'
+                      : 'ring-white/5 hover:ring-primary-300/40'}`}
+    >
+      {/* Top row: tag + badge */}
+      <div className="mb-6 flex items-center justify-between text-xs tracking-[0.18em] text-white/50">
+        <span>
+          <span className="text-primary-300">{`}`}</span>
+          <span className="ml-2">{plan.tag}</span>
+        </span>
+        {plan.badge && (
+          <span
+            className={`rounded-full px-3 py-1 text-[10px] font-medium tracking-[0.14em]
+                        ${isAmber
+                          ? 'bg-amber-glow/15 text-amber-glow'
+                          : 'bg-primary-500/15 text-primary-200'}`}
+          >
+            {plan.badge}
+          </span>
+        )}
+      </div>
+
+      <div className="text-2xl font-medium md:text-[28px]">{plan.name}</div>
+      <p className="mt-1 text-sm text-white/60">{plan.blurb}</p>
+
+      <div className="mt-6 flex items-baseline gap-2">
+        <span className={`text-[64px] font-light leading-none tracking-tight
+                          ${isPopular ? 'text-primary-300' : isAmber ? 'text-amber-glow' : 'text-white'}`}>
+          ${plan.price}
+        </span>
+        <span className="text-xs tracking-[0.18em] text-white/45">USD</span>
+      </div>
+
+      <ul className="mt-7 space-y-2.5 text-sm text-white/75">
+        {plan.features.map((f) => (
+          <li key={f} className="flex gap-2">
+            <span className="mt-0.5 text-primary-300">{'›'}</span>
+            <span>{f}</span>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        type="button"
+        onClick={onChoose}
+        className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full
+                    px-6 py-3 text-xs font-medium tracking-[0.20em] uppercase transition
+                    ${isPopular
+                      ? 'bg-primary-500 text-white hover:bg-primary-400 hover:shadow-[0_0_30px_-8px_rgba(168,85,247,0.6)]'
+                      : isAmber
+                        ? 'bg-amber-glow/90 text-black hover:bg-amber-glow'
+                        : 'bg-white/8 text-white ring-1 ring-white/10 hover:bg-white/12 hover:ring-primary-300/40'}`}
+      >
+        Choose plan
+        <span aria-hidden className="transition group-hover:translate-x-0.5">→</span>
+      </button>
+    </div>
   );
 }

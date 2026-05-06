@@ -174,9 +174,9 @@ export default function TermsOfService() {
             <h2 className="text-3xl font-bold text-gray-900 mb-4">13. Contact Information</h2>
             <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
               <p className="text-gray-700 mb-2">For questions about these Terms, contact us:</p>
-              <p className="text-gray-700 mb-2">Email: <a href="mailto:legal@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">legal@leadsgen-pro.shop</a></p>
-              <p className="text-gray-700 mb-2">Support: <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">support@leadsgen-pro.shop</a></p>
-              <p className="text-gray-700">Website: <a href="https://leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">https://leadsgen-pro.shop</a></p>
+              <p className="text-gray-700 mb-2">Email: <a href="mailto:legal@thezettahub.com" className="text-primary-600 hover:text-primary-700">legal@thezettahub.com</a></p>
+              <p className="text-gray-700 mb-2">Support: <a href="mailto:support@thezettahub.com" className="text-primary-600 hover:text-primary-700">support@thezettahub.com</a></p>
+              <p className="text-gray-700">Website: <a href="https://leads.thezettahub.com" className="text-primary-600 hover:text-primary-700">https://leads.thezettahub.com</a></p>
             </div>
           </section>
 

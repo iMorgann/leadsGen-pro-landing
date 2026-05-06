@@ -43,7 +43,7 @@ cp .env.local.example .env.local
 
 Edit `.env.local` and set:
 ```
-NEXT_PUBLIC_API_URL=https://license.leadsgen-pro.shop
+NEXT_PUBLIC_API_URL=https://license.leads.thezettahub.com
 ```
 
 3. Run development server:
@@ -185,7 +185,7 @@ Update contact details in:
 
 ## Support
 
-- Email: support@leadsgen-pro.shop
+- Email: support@thezettahub.com
 - Telegram: @irootbck
 
 ## License

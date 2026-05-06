@@ -101,7 +101,7 @@ export default function Documentation() {
                       Your software will connect to our servers and validate your license.
                     </p>
                     <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                      <p className="text-sm text-blue-800"><strong>💡 Tip:</strong> Can't find your license key? Check your spam folder or contact support@leadsgen-pro.shop</p>
+                      <p className="text-sm text-blue-800"><strong>💡 Tip:</strong> Can't find your license key? Check your spam folder or contact support@thezettahub.com</p>
                     </div>
                   </div>
                 </div>
@@ -382,7 +382,7 @@ export default function Documentation() {
                   <p className="text-gray-700 mb-4">
                     <strong>📺 Access Full Video Library:</strong> Premium video tutorials are available on our YouTube channel and in-app help center.
                   </p>
-                  <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700 font-semibold">
+                  <a href="mailto:support@thezettahub.com" className="text-primary-600 hover:text-primary-700 font-semibold">
                     Request access to video tutorials →
                   </a>
                 </div>
@@ -614,7 +614,7 @@ export default function Documentation() {
                     If you can't find a solution to your problem, our support team is here to help:
                   </p>
                   <div className="space-y-2 text-gray-700">
-                    <p><strong>Email:</strong> <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700 font-semibold">support@leadsgen-pro.shop</a></p>
+                    <p><strong>Email:</strong> <a href="mailto:support@thezettahub.com" className="text-primary-600 hover:text-primary-700 font-semibold">support@thezettahub.com</a></p>
                     <p><strong>Telegram:</strong> <a href="https://t.me/irootbck" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700 font-semibold">@irootbck</a> (Fastest response)</p>
                     <p><strong>In-App:</strong> Help → Contact Support</p>
                   </div>
@@ -639,7 +639,7 @@ export default function Documentation() {
             <h3 className="font-bold text-lg mb-2 group-hover:text-primary-600 transition-colors">Refund Policy</h3>
             <p className="text-sm text-gray-600">30-day guarantee details</p>
           </Link>
-          <a href="mailto:support@leadsgen-pro.shop" className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all group">
+          <a href="mailto:support@thezettahub.com" className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition-all group">
             <div className="text-3xl mb-3 group-hover:scale-110 transition-transform">📧</div>
             <h3 className="font-bold text-lg mb-2 group-hover:text-primary-600 transition-colors">Contact Support</h3>
             <p className="text-sm text-gray-600">Get personalized help</p>

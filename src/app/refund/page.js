@@ -50,7 +50,7 @@ export default function RefundPolicy() {
             </p>
             <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
               <li>You request the refund within 30 days of your original purchase date</li>
-              <li>You purchased directly from leadsgen-pro.shop</li>
+              <li>You purchased directly from leads.thezettahub.com</li>
               <li>Your payment has been successfully processed</li>
               <li>You provide the email address used for purchase</li>
             </ul>
@@ -71,7 +71,7 @@ export default function RefundPolicy() {
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Contact Our Support Team</h3>
                   <p className="text-gray-700">
-                    Email us at <a href="mailto:refunds@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700 font-semibold">refunds@leadsgen-pro.shop</a> with the subject line "Refund Request"
+                    Email us at <a href="mailto:refunds@thezettahub.com" className="text-primary-600 hover:text-primary-700 font-semibold">refunds@thezettahub.com</a> with the subject line "Refund Request"
                   </p>
                 </div>
               </div>
@@ -201,8 +201,8 @@ export default function RefundPolicy() {
                 If you have any questions about our refund policy or need assistance, our support team is here to help:
               </p>
               <div className="space-y-2">
-                <p className="text-gray-700"><strong>Refund Requests:</strong> <a href="mailto:refunds@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">refunds@leadsgen-pro.shop</a></p>
-                <p className="text-gray-700"><strong>General Support:</strong> <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">support@leadsgen-pro.shop</a></p>
+                <p className="text-gray-700"><strong>Refund Requests:</strong> <a href="mailto:refunds@thezettahub.com" className="text-primary-600 hover:text-primary-700">refunds@thezettahub.com</a></p>
+                <p className="text-gray-700"><strong>General Support:</strong> <a href="mailto:support@thezettahub.com" className="text-primary-600 hover:text-primary-700">support@thezettahub.com</a></p>
                 <p className="text-gray-700"><strong>Telegram:</strong> <a href="https://t.me/irootbck" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">@irootbck</a></p>
               </div>
             </div>

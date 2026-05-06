@@ -42,7 +42,7 @@ export default function FAQ() {
         },
         {
           question: 'What happens if I lose my license key?',
-          answer: 'No problem! Contact our support team at support@leadsgen-pro.shop with your purchase email address. We\'ll resend your license key within 24 hours. You can also find it in your original purchase confirmation email.'
+          answer: 'No problem! Contact our support team at support@thezettahub.com with your purchase email address. We\'ll resend your license key within 24 hours. You can also find it in your original purchase confirmation email.'
         },
         {
           question: 'Can I transfer my license to someone else?',
@@ -116,7 +116,7 @@ export default function FAQ() {
         },
         {
           question: 'What is your refund policy?',
-          answer: 'We offer a 30-day money-back guarantee, no questions asked. If you\'re not satisfied, email refunds@leadsgen-pro.shop within 30 days of purchase with your order details. Refunds are processed within 5-7 business days. See our full Refund Policy at /refund for details.'
+          answer: 'We offer a 30-day money-back guarantee, no questions asked. If you\'re not satisfied, email refunds@thezettahub.com within 30 days of purchase with your order details. Refunds are processed within 5-7 business days. See our full Refund Policy at /refund for details.'
         },
         {
           question: 'Can I upgrade or downgrade my plan?',
@@ -130,7 +130,7 @@ export default function FAQ() {
       questions: [
         {
           question: 'How do I contact support?',
-          answer: 'Reach us via: Email at support@leadsgen-pro.shop (24-48 hour response), Telegram at @irootbck (fastest response), or through the in-app Help > Contact Support feature. Premium and Business license holders get priority support with faster response times.'
+          answer: 'Reach us via: Email at support@thezettahub.com (24-48 hour response), Telegram at @irootbck (fastest response), or through the in-app Help > Contact Support feature. Premium and Business license holders get priority support with faster response times.'
         },
         {
           question: 'Do you offer live chat support?',
@@ -171,7 +171,7 @@ export default function FAQ() {
         {/* Search Prompt */}
         <div className="mb-12 text-center">
           <p className="text-gray-600 text-lg mb-4">
-            Can't find what you're looking for? <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700 font-semibold">Contact our support team</a>
+            Can't find what you're looking for? <a href="mailto:support@thezettahub.com" className="text-primary-600 hover:text-primary-700 font-semibold">Contact our support team</a>
           </p>
         </div>
 
@@ -243,7 +243,7 @@ export default function FAQ() {
             </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <a
-                href="mailto:support@leadsgen-pro.shop"
+                href="mailto:support@thezettahub.com"
                 className="inline-flex items-center justify-center gradient-bg text-white px-8 py-4 rounded-xl font-bold hover:shadow-xl transition-all"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

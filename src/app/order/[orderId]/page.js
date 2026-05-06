@@ -3,49 +3,43 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import api from '@/services/api';
 import toast, { Toaster } from 'react-hot-toast';
+import Link from 'next/link';
+
+const RELEASE_ZIP_URL =
+  'https://github.com/iMorgann/leadsGen-pro-landing/releases/download/v2.1.0/LeadsGenPro-v2.1.0-Setup.zip';
 
 export default function OrderStatusPage() {
-  const params = useParams();
-  const orderId = params.orderId;
-
+  const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [polling, setPolling] = useState(true);
 
   useEffect(() => {
-    fetchOrderStatus();
-
-    // Poll every 10 seconds if order is pending
-    const interval = setInterval(() => {
-      if (polling) {
-        fetchOrderStatus();
-      }
-    }, 10000);
-
-    return () => clearInterval(interval);
+    fetchStatus();
+    const id = setInterval(() => polling && fetchStatus(), 10000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId, polling]);
 
-  const fetchOrderStatus = async () => {
+  const fetchStatus = async () => {
     try {
-      const response = await api.getOrderStatus(orderId);
-      if (response.success) {
-        setOrder(response.order);
-
-        // Stop polling if order is completed or rejected
-        if (response.order.status === 'completed' || response.order.status === 'rejected') {
+      const r = await api.getOrderStatus(orderId);
+      if (r.success) {
+        setOrder(r.order);
+        if (r.order.status === 'completed' || r.order.status === 'rejected') {
           setPolling(false);
         }
       } else {
         toast.error('Order not found');
       }
-    } catch (error) {
-      console.error('Error fetching order status:', error);
+    } catch (e) {
+      console.error(e);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDownload = async () => {
+  const handleDownloadLicense = async () => {
     try {
       const blob = await api.downloadLicense(orderId);
       const url = window.URL.createObjectURL(blob);
@@ -55,257 +49,249 @@ export default function OrderStatusPage() {
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      toast.success('License downloaded!');
-    } catch (error) {
+      a.remove();
+      toast.success('License downloaded');
+    } catch {
       toast.error('Failed to download license');
     }
   };
 
-  const copyToClipboard = (text) => {
+  const copy = (text) => {
     navigator.clipboard.writeText(text);
-    toast.success('Copied to clipboard!');
+    toast.success('Copied');
   };
 
+  /* ------- early returns ------- */
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 mb-4"></div>
-          <p className="text-gray-600">Loading order...</p>
-        </div>
-      </div>
-    );
+    return <CenterShell><Spinner label="Loading order…" /></CenterShell>;
   }
-
   if (!order) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900">
+      <CenterShell>
         <div className="text-center">
-          <div className="text-6xl mb-4">❌</div>
-          <h1 className="text-2xl font-bold mb-2">Order Not Found</h1>
-          <p className="text-gray-600 mb-6">The order ID you provided is invalid</p>
-          <a href="/" className="gradient-bg text-white px-6 py-3 rounded-lg font-semibold">
-            Go to Home
-          </a>
+          <div className="mb-3 text-5xl">⚠</div>
+          <div className="text-2xl font-light">Order not found</div>
+          <p className="mt-2 text-white/55">The order ID you provided doesn’t match anything in our system.</p>
+          <Link
+            href="/"
+            className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary-500 px-6 py-3
+                       text-xs font-medium tracking-[0.20em] uppercase text-white
+                       transition hover:bg-primary-400"
+          >
+            Back to home →
+          </Link>
         </div>
-      </div>
+      </CenterShell>
     );
   }
 
-  const statusConfig = {
+  const STATUS = {
     pending: {
-      icon: '⏳',
-      title: 'Waiting for Payment',
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-50',
-      borderColor: 'border-yellow-200'
+      tag: 'WAITING FOR PAYMENT',
+      title: 'Awaiting your transfer',
+      tone: 'amber',
+      detail: 'Send the crypto from the checkout step. We’ll see it on-chain.',
     },
     txid_submitted: {
-      icon: '🔍',
-      title: 'Payment Under Review',
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200'
+      tag: 'PAYMENT UNDER REVIEW',
+      title: 'Verifying your transaction',
+      tone: 'purple',
+      detail: 'Usually 5–30 minutes. This page polls every 10 seconds — leave it open.',
     },
     completed: {
-      icon: '✅',
-      title: 'Payment Confirmed!',
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
-      borderColor: 'border-green-200'
+      tag: 'PAYMENT CONFIRMED',
+      title: 'Your license is ready',
+      tone: 'green',
+      detail: 'Use the key below to activate the desktop app.',
     },
     rejected: {
-      icon: '❌',
-      title: 'Payment Rejected',
-      color: 'text-red-600',
-      bgColor: 'bg-red-50',
-      borderColor: 'border-red-200'
-    }
+      tag: 'PAYMENT REJECTED',
+      title: 'Could not verify the transaction',
+      tone: 'red',
+      detail: order.rejection_reason || 'Reach out on Telegram and we’ll sort it out manually.',
+    },
   };
-
-  const status = statusConfig[order.status] || statusConfig.pending;
+  const s = STATUS[order.status] || STATUS.pending;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 text-gray-900">
-      <Toaster position="top-center" />
+    <div className="relative min-h-screen overflow-hidden bg-dark-base text-white">
+      <Toaster position="top-center" toastOptions={{ style: { background: '#12102a', color: '#fff', border: '1px solid rgba(168,85,247,0.4)' } }} />
 
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2">
-            <span className="gradient-text">Order Status</span>
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 left-1/2 h-[700px] w-[1000px] -translate-x-1/2 rounded-full
+                        bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.30),transparent_70%)]" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-3xl px-6 py-16 md:py-20 md:px-8">
+        <header className="mb-10">
+          <Link href="/" className="font-mono text-base tracking-wide text-white/85 hover:text-white">
+            <span className="text-primary-300">LeadsGen</span>
+            <span className="text-primary-400">{'}'}</span>
+          </Link>
+          <p className="mt-8 text-[12px] font-medium tracking-[0.22em] text-primary-300">
+            ORDER · <span className="font-mono normal-case tracking-normal text-white/65">{orderId}</span>
+          </p>
+          <h1 className="mt-3 text-balance text-4xl font-light leading-tight md:text-5xl">
+            <span className="text-primary-300">{'}'}</span> {s.title}
           </h1>
-          <p className="text-gray-600">Order ID: {orderId}</p>
-        </div>
+          <p className="mt-3 text-white/60">{s.detail}</p>
+          <StatusPill tone={s.tone}>{s.tag}</StatusPill>
+        </header>
 
-        {/* Status Card */}
-        <div className={`bg-white rounded-2xl shadow-xl p-8 mb-6 border-2 ${status.borderColor}`}>
-          <div className="text-center mb-8">
-            <div className="text-8xl mb-4">{status.icon}</div>
-            <h2 className={`text-3xl font-bold mb-2 ${status.color}`}>{status.title}</h2>
-
-            {order.status === 'pending' && (
-              <p className="text-gray-600">Please complete the payment to proceed</p>
-            )}
-
-            {order.status === 'txid_submitted' && (
-              <div>
-                <p className="text-gray-600 mb-4">
-                  Our team is verifying your payment. This usually takes 5-30 minutes.
-                </p>
-                <div className="inline-flex items-center text-sm text-gray-500">
-                  <div className="animate-pulse mr-2">🔄</div>
-                  Checking status every 10 seconds...
-                </div>
-              </div>
-            )}
-
-            {order.status === 'completed' && (
-              <p className="text-gray-600">Your license is ready! Check your email or download below.</p>
-            )}
-
-            {order.status === 'rejected' && (
-              <p className="text-gray-600">
-                {order.rejection_reason || 'Payment could not be verified. Please contact support.'}
-              </p>
-            )}
-          </div>
-
-          {/* Order Details */}
-          <div className="space-y-4 mb-6">
-            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-              <span className="text-gray-600">Plan:</span>
-              <span className="font-bold">{order.plan_type.replace('_', ' ')}</span>
-            </div>
-            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-              <span className="text-gray-600">Amount:</span>
-              <span className="font-bold text-lg">${order.amount}</span>
-            </div>
-            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-              <span className="text-gray-600">Cryptocurrency:</span>
-              <span className="font-bold">{order.coin}</span>
-            </div>
-            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-              <span className="text-gray-600">Email:</span>
-              <span className="font-mono text-sm">{order.user_email}</span>
-            </div>
+        {/* Order summary */}
+        <div className="rounded-3xl bg-dark-card/95 p-7 ring-1 ring-white/5 md:p-9">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <KV label="Plan"     value={String(order.plan_type).replace(/_/g, ' ')} />
+            <KV label="Amount"   value={`$${order.amount}`} valueClass="text-primary-300 text-lg" />
+            <KV label="Currency" value={order.coin} />
+            <KV label="Email"    value={order.user_email} mono />
             {order.txid && (
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                <span className="text-gray-600">Transaction ID:</span>
-                <div className="flex items-center">
-                  <span className="font-mono text-sm mr-2">{order.txid.substring(0, 16)}...</span>
-                  <button
-                    onClick={() => copyToClipboard(order.txid)}
-                    className="text-primary-600 hover:text-primary-700"
-                  >
-                    📋
-                  </button>
-                </div>
-              </div>
+              <KV
+                label="Transaction"
+                value={
+                  <span className="flex items-center gap-2">
+                    <span className="font-mono">{String(order.txid).slice(0, 16)}…</span>
+                    <button onClick={() => copy(order.txid)} className="text-primary-300 hover:text-primary-200">
+                      📋
+                    </button>
+                  </span>
+                }
+                rawValue
+              />
             )}
           </div>
 
-          {/* License Key (if completed) */}
+          {/* License key */}
           {order.status === 'completed' && order.license_key && (
-            <div className="bg-gradient-to-r from-primary-500 to-secondary-600 rounded-xl p-6 text-white mb-6">
-              <h3 className="text-xl font-bold mb-4">Your License Key</h3>
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 mb-4">
-                <p className="font-mono text-2xl text-center break-all">{order.license_key}</p>
+            <div className="mt-7 rounded-2xl border border-primary-300/30 bg-primary-500/10 p-5 ring-1 ring-primary-300/40">
+              <div className="text-xs tracking-[0.18em] text-primary-200">YOUR LICENSE KEY</div>
+              <div className="mt-3 break-all rounded-xl bg-black/40 p-4 text-center font-mono text-xl text-white ring-1 ring-white/10">
+                {order.license_key}
               </div>
-              <div className="flex gap-3">
+              <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                 <button
-                  onClick={() => copyToClipboard(order.license_key)}
-                  className="flex-1 bg-white text-primary-600 py-3 rounded-lg font-bold hover:bg-blue-50 transition-all"
+                  onClick={() => copy(order.license_key)}
+                  className="flex-1 rounded-full bg-primary-500 px-5 py-3 text-xs font-medium
+                             tracking-[0.18em] uppercase text-white transition hover:bg-primary-400"
                 >
-                  📋 Copy License Key
+                  Copy key
                 </button>
                 <button
-                  onClick={handleDownload}
-                  className="flex-1 bg-white/20 backdrop-blur-sm text-white py-3 rounded-lg font-bold hover:bg-white/30 transition-all"
+                  onClick={handleDownloadLicense}
+                  className="flex-1 rounded-full bg-white/8 px-5 py-3 text-xs font-medium
+                             tracking-[0.18em] uppercase text-white ring-1 ring-white/10
+                             transition hover:bg-white/12 hover:ring-primary-300/40"
                 >
-                  💾 Download as File
+                  Download .txt
                 </button>
               </div>
             </div>
           )}
 
-          {/* Actions */}
-          <div className="space-y-3">
+          {/* Action row */}
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             {order.status === 'completed' && (
-              <a
-                href="#download"
-                className="block w-full gradient-bg text-white py-4 rounded-lg font-bold text-center hover:opacity-90 transition-all"
+              <Link
+                href={RELEASE_ZIP_URL}
+                className="flex-1 rounded-full bg-primary-500 px-6 py-3 text-center text-xs
+                           font-medium tracking-[0.20em] uppercase text-white transition
+                           hover:bg-primary-400 hover:shadow-[0_0_30px_-8px_rgba(168,85,247,0.6)]"
+                prefetch={false}
               >
-                Download LeadsGen Pro
-              </a>
+                Download v2.1.0 ↓
+              </Link>
             )}
-
             {(order.status === 'rejected' || order.status === 'pending') && (
               <a
                 href="https://t.me/irootbck"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full gradient-bg text-white py-4 rounded-lg font-bold text-center hover:opacity-90 transition-all"
+                className="flex-1 rounded-full bg-primary-500 px-6 py-3 text-center text-xs
+                           font-medium tracking-[0.20em] uppercase text-white transition
+                           hover:bg-primary-400"
               >
-                Contact Support on Telegram
+                Telegram support
               </a>
             )}
-
-            <a
+            <Link
               href="/"
-              className="block w-full bg-gray-100 text-gray-700 py-3 rounded-lg font-semibold text-center hover:bg-gray-200 transition-all"
+              className="flex-1 rounded-full bg-white/8 px-6 py-3 text-center text-xs font-medium
+                         tracking-[0.20em] uppercase text-white ring-1 ring-white/10
+                         transition hover:bg-white/12 hover:ring-primary-300/40"
             >
-              Back to Home
-            </a>
+              Back to home
+            </Link>
           </div>
+
+          {order.status === 'txid_submitted' && (
+            <div className="mt-6 inline-flex items-center gap-2 text-xs tracking-[0.18em] text-white/55">
+              <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-primary-300" />
+              POLLING EVERY 10s
+            </div>
+          )}
         </div>
 
-        {/* Download Section (if completed) */}
-        {order.status === 'completed' && (
-          <div id="download" className="bg-white rounded-2xl shadow-xl p-8">
-            <h3 className="text-2xl font-bold mb-6 text-center">Download LeadsGen Pro</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <a
-                href="https://leadsgen-pro.shop/download/LeadsGenPro.zip"
-                download
-                className="p-6 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:shadow-lg transition-all text-center"
-              >
-                <div className="text-4xl mb-2">💻</div>
-                <div className="font-bold">Windows</div>
-                <div className="text-sm text-gray-500">ZIP (92MB)</div>
-              </a>
-              <a
-                href="https://leadsgen-pro.shop/download/LeadsGenPro-Mac.zip"
-                download
-                className="p-6 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:shadow-lg transition-all text-center"
-              >
-                <div className="text-4xl mb-2">🍎</div>
-                <div className="font-bold">macOS</div>
-                <div className="text-sm text-gray-500">ZIP</div>
-              </a>
-              <a
-                href="https://leadsgen-pro.shop/download/LeadsGenPro-Linux.zip"
-                download
-                className="p-6 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:shadow-lg transition-all text-center"
-              >
-                <div className="text-4xl mb-2">🐧</div>
-                <div className="font-bold">Linux</div>
-                <div className="text-sm text-gray-500">ZIP</div>
-              </a>
-            </div>
-            <p className="text-center text-sm text-gray-500 mt-6">
-              📌 Extract the ZIP file and run the installer
-            </p>
-          </div>
-        )}
-
         {/* Help */}
-        <div className="text-center mt-8 text-gray-600">
-          <p>Need help? Contact us at <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:underline">support@leadsgen-pro.shop</a></p>
-          <p className="mt-2">or Telegram: <a href="https://t.me/irootbck" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">@irootbck</a></p>
+        <div className="mt-10 text-center text-sm text-white/55">
+          Need help?{' '}
+          <a href="mailto:support@thezettahub.com" className="text-primary-300 hover:text-primary-200">
+            support@thezettahub.com
+          </a>{' '}
+          ·{' '}
+          <a
+            href="https://t.me/irootbck"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary-300 hover:text-primary-200"
+          >
+            Telegram @irootbck
+          </a>
         </div>
       </div>
     </div>
+  );
+}
+
+/* ---------- helpers ---------- */
+function CenterShell({ children }) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-dark-base px-6 text-white">
+      {children}
+    </div>
+  );
+}
+function Spinner({ label }) {
+  return (
+    <div className="text-center">
+      <div className="mx-auto h-12 w-12 animate-spin rounded-full border-2 border-primary-300 border-t-transparent" />
+      <p className="mt-4 text-white/55">{label}</p>
+    </div>
+  );
+}
+function KV({ label, value, valueClass = '', mono = false, rawValue = false }) {
+  return (
+    <div className="rounded-2xl bg-white/[0.04] px-4 py-3 ring-1 ring-white/5">
+      <div className="text-[11px] tracking-[0.18em] text-white/45">{String(label).toUpperCase()}</div>
+      <div className={`mt-1 truncate text-sm ${mono ? 'font-mono' : ''} ${valueClass}`}>
+        {rawValue ? value : String(value)}
+      </div>
+    </div>
+  );
+}
+function StatusPill({ tone, children }) {
+  const tones = {
+    amber:  'bg-amber-glow/15 text-amber-glow ring-amber-glow/30',
+    purple: 'bg-primary-500/15 text-primary-200 ring-primary-300/30',
+    green:  'bg-emerald-500/15 text-emerald-300 ring-emerald-400/30',
+    red:    'bg-red-500/15 text-red-300 ring-red-400/30',
+  };
+  return (
+    <span
+      className={`mt-5 inline-flex items-center gap-2 rounded-full px-3 py-1.5
+                  text-[11px] font-medium tracking-[0.18em] ring-1
+                  ${tones[tone] || tones.purple}`}
+    >
+      {children}
+    </span>
   );
 }

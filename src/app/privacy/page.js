@@ -149,7 +149,7 @@ export default function PrivacyPolicy() {
               <li><strong>Withdraw Consent:</strong> Withdraw previously given consent</li>
             </ul>
             <p className="text-gray-700 leading-relaxed">
-              To exercise these rights, please contact us at <a href="mailto:privacy@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700 font-semibold">privacy@leadsgen-pro.shop</a>
+              To exercise these rights, please contact us at <a href="mailto:privacy@thezettahub.com" className="text-primary-600 hover:text-primary-700 font-semibold">privacy@thezettahub.com</a>
             </p>
           </section>
 
@@ -185,9 +185,9 @@ export default function PrivacyPolicy() {
             </p>
             <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
               <p className="text-gray-700 mb-2"><strong>LeadsGen Pro</strong></p>
-              <p className="text-gray-700 mb-2">Email: <a href="mailto:privacy@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">privacy@leadsgen-pro.shop</a></p>
-              <p className="text-gray-700 mb-2">Support: <a href="mailto:support@leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">support@leadsgen-pro.shop</a></p>
-              <p className="text-gray-700">Website: <a href="https://leadsgen-pro.shop" className="text-primary-600 hover:text-primary-700">https://leadsgen-pro.shop</a></p>
+              <p className="text-gray-700 mb-2">Email: <a href="mailto:privacy@thezettahub.com" className="text-primary-600 hover:text-primary-700">privacy@thezettahub.com</a></p>
+              <p className="text-gray-700 mb-2">Support: <a href="mailto:support@thezettahub.com" className="text-primary-600 hover:text-primary-700">support@thezettahub.com</a></p>
+              <p className="text-gray-700">Website: <a href="https://leads.thezettahub.com" className="text-primary-600 hover:text-primary-700">https://leads.thezettahub.com</a></p>
             </div>
           </section>
 

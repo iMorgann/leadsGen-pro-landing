@@ -5,9 +5,9 @@ export default function Contact() {
     {
       icon: '📧',
       title: 'Email Support',
-      content: 'support@leadsgen-pro.shop',
+      content: 'support@thezettahub.com',
       description: "We'll respond within 24 hours",
-      link: 'mailto:support@leadsgen-pro.shop',
+      link: 'mailto:support@thezettahub.com',
       gradient: 'from-blue-500 to-indigo-600'
     },
     {

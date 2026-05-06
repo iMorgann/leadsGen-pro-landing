@@ -1,5 +1,5 @@
 export default function sitemap() {
-  const baseUrl = 'https://leadsgen-pro.shop';
+  const baseUrl = 'https://leads.thezettahub.com';
   const currentDate = new Date().toISOString();
 
   return [
