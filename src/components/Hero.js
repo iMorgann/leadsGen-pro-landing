@@ -1,226 +1,175 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
-// Platform nodes for outer ring (8 nodes at 45° intervals)
-const OUTER_NODES = [
-  { label: 'Google Maps', icon: '🗺️', angle: 0 },
-  { label: 'Yelp',        icon: '⭐', angle: 45 },
-  { label: 'Yellow Pages',icon: '📒', angle: 90 },
-  { label: 'BBB',         icon: '🏆', angle: 135 },
-  { label: 'Houzz',       icon: '🏠', angle: 180 },
-  { label: 'TripAdvisor', icon: '✈️', angle: 225 },
-  { label: 'Angi',        icon: '🔧', angle: 270 },
-  { label: 'Manta',       icon: '🌐', angle: 315 },
-];
-
-// Platform nodes for inner ring (4 nodes at 90° intervals)
-const INNER_NODES = [
-  { label: 'Thumbtack',   icon: '📌', angle: 0 },
-  { label: 'SuperPages',  icon: '📱', angle: 90 },
-  { label: 'DexKnows',    icon: '📞', angle: 180 },
-  { label: 'Emails+Ph',   icon: '📧', angle: 270 },
-];
-
+/**
+ * Hero — bracketed dark/purple aesthetic.
+ *
+ * Layout
+ *  - Top-left: wordmark
+ *  - Top-right: nav-style chips with superscript indices
+ *  - Two-column body: huge headline w/ `}` bracket left, brief description + CTA right
+ *  - Bottom row: large rounded dark stat tiles (3 cards) with a hairline curve overlay
+ *
+ * No third-party imagery; everything is layered with Tailwind utilities + a single
+ * SVG hairline arc for the abstract circle motif.
+ */
 export default function Hero() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [outerAngle, setOuterAngle] = useState(0);
-  const [innerAngle, setInnerAngle] = useState(0);
-
-  useEffect(() => {
-    setIsVisible(true);
-
-    // Animate orbital rings via requestAnimationFrame
-    let lastTime = null;
-    let raf;
-
-    const animate = (time) => {
-      if (lastTime !== null) {
-        const delta = time - lastTime;
-        setOuterAngle((prev) => (prev + delta * 0.006) % 360);   // 30s full rotation
-        setInnerAngle((prev) => (prev - delta * 0.009) % 360);   // 20s full rotation, reverse
-      }
-      lastTime = time;
-      raf = requestAnimationFrame(animate);
-    };
-
-    raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
-  const toRad = (deg) => (deg * Math.PI) / 180;
-
-  // Compute (x, y) for a node on a ring of given radius at given angle
-  const nodePos = (angle, radius) => ({
-    x: Math.cos(toRad(angle - 90)) * radius,
-    y: Math.sin(toRad(angle - 90)) * radius,
-  });
+  const [show, setShow] = useState(false);
+  useEffect(() => setShow(true), []);
 
   return (
-    <section className="relative min-h-screen flex items-center bg-[#0a0a14] overflow-hidden pt-16">
-      {/* Background glows */}
-      <div className="hero-glow-amber" />
-      <div className="hero-glow-purple" />
+    <section className="relative min-h-screen w-full overflow-hidden bg-dark-base text-white">
+      {/* Background gradient glow — concentrates light upper-right of headline */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-40 right-[-10%] h-[900px] w-[900px] rounded-full
+                        bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.55),transparent_70%)]" />
+        <div className="absolute top-1/3 left-[-5%] h-[600px] w-[600px] rounded-full
+                        bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.25),transparent_70%)]" />
+      </div>
 
-      {/* Subtle grid overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(139,92,246,1) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,1) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }}
-      />
+      {/* Hairline arc — abstract circle behind the title (matches reference design) */}
+      <svg
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full opacity-50"
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="arcStroke" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="rgba(255,255,255,0.55)" />
+            <stop offset="100%" stopColor="rgba(168,85,247,0.0)" />
+          </linearGradient>
+        </defs>
+        <circle cx="640" cy="540" r="640" fill="none"
+                stroke="url(#arcStroke)" strokeWidth="1.2" />
+        <circle cx="900" cy="500" r="420" fill="none"
+                stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
+      </svg>
 
-      <div className="max-w-7xl mx-auto px-6 py-20 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* ─── Top bar ────────────────────────────── */}
+      <header className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12 md:py-8">
+        <Link href="/" className="font-mono text-base tracking-wide text-white">
+          <span className="text-primary-300">LeadsGen</span>
+          <span className="text-primary-400">{'}'}</span>
+        </Link>
 
-          {/* ── Left Column ─────────────────────────────── */}
-          <div className={`transition-all duration-1000 ${isVisible ? 'fade-in-up' : 'opacity-0'}`}>
+        <nav className="hidden items-center gap-8 md:flex">
+          <NavChip href="#features" label="FEATURES"  index="07" />
+          <NavChip href="#pricing"  label="PRICING"   index="09" />
+          <NavChip href="/docs"     label="DOCS"      index="05" />
+          <NavChip href="#download" label="DOWNLOAD"  index="v2.1" />
+        </nav>
+      </header>
 
-            {/* Version pill */}
-            <div className="inline-flex items-center gap-2 bg-purple-900/30 border border-purple-700/40 rounded-full px-4 py-1.5 mb-8">
-              <span className="text-sm">🚀</span>
-              <span className="text-sm font-semibold text-purple-300">v2.1.0 — Now with 17+ Scrapers</span>
-            </div>
+      {/* ─── Body ────────────────────────────── */}
+      <div className="relative z-10 mx-auto grid max-w-[1280px] gap-12 px-6 pt-8 md:grid-cols-12 md:px-12 md:pt-16">
+        {/* Headline column */}
+        <div className={`md:col-span-7 transition-all duration-700 ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'}`}>
+          <h1 className="text-balance font-medium leading-[0.95] tracking-tight text-white">
+            <span className="block text-[44px] sm:text-[64px] md:text-[88px]">
+              <span className="text-primary-300 mr-3">{'}'}</span>
+              <span className="font-light">LeadsGen Pro</span>
+            </span>
+            <span className="mt-2 block text-[34px] font-light text-white/95 sm:text-[48px] md:text-[64px]">
+              Is your All-in-One
+            </span>
+            <span className="mt-1 block text-[34px] font-light text-white/95 sm:text-[48px] md:text-[64px]">
+              Business Lead
+            </span>
+            <span className="mt-1 block text-[44px] font-light text-white sm:text-[60px] md:text-[80px]">
+              Extraction Engine
+            </span>
+          </h1>
+        </div>
 
-            {/* Headline */}
-            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
-              Extract Business Leads
-              <br />
-              <span className="text-gray-200">From Any Platform —</span>
-              <br />
-              <span className="gradient-text">Automated & Precise</span>
-            </h1>
+        {/* Description + CTA column */}
+        <div className={`md:col-span-5 md:pt-12 transition-all duration-700 delay-150 ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'}`}>
+          <p className="max-w-md text-base leading-relaxed text-white/80 md:text-[15px]">
+            <span className="mr-2 text-primary-300">{'}'}</span>
+            Renowned for powering high-volume B2B lead workflows with Google Maps,
+            Common Crawl &amp; Emails/Phones scrapers, concurrent search engines, and
+            full Telegram remote control — solve CAPTCHAs from your phone, get the
+            final XLSX delivered to your chat.
+          </p>
 
-            {/* Subtext */}
-            <p className="text-lg text-gray-400 leading-relaxed mb-10 max-w-xl">
-              17 scraper sources. Dual-browser extraction. Real-time results.
-              Export to XLSX, CSV, and TXT instantly.
-            </p>
-
-            {/* CTA buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <a
-                href="#download"
-                className="group inline-flex items-center justify-center gap-2 bg-[#1a1040] border border-purple-500/60 hover:border-purple-400 text-white font-bold px-8 py-4 rounded-xl transition-all duration-200 hover:bg-[#201450] hover:shadow-xl hover:shadow-purple-900/30 text-lg"
-              >
-                Download Free Trial
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </a>
-              <a
-                href="#pricing"
-                className="inline-flex items-center justify-center gap-2 text-gray-400 hover:text-white font-medium px-8 py-4 rounded-xl transition-colors duration-200 text-lg border border-transparent hover:border-white/10"
-              >
-                View Pricing
-              </a>
-            </div>
-
-            {/* Trust strip */}
-            <div className="flex flex-wrap items-center gap-2 text-gray-600 text-sm">
-              <span className="text-gray-500 font-medium text-xs uppercase tracking-wider">Supported Platforms:</span>
-              {['Google Maps', 'Yelp', 'Yellow Pages', 'BBB', 'Houzz', 'TripAdvisor'].map((p, i, arr) => (
-                <span key={p} className="flex items-center gap-2">
-                  <span className="text-gray-400">{p}</span>
-                  {i < arr.length - 1 && <span className="text-gray-700">·</span>}
-                </span>
-              ))}
-              <span className="text-gray-700">·</span>
-              <span className="text-purple-500 font-semibold">+11 more</span>
-            </div>
-          </div>
-
-          {/* ── Right Column — Orbital ───────────────────── */}
-          <div className={`flex justify-center transition-all duration-1000 delay-300 ${isVisible ? 'fade-in-right' : 'opacity-0'}`}>
-            <div className="relative" style={{ width: 480, height: 480 }}>
-
-              {/* Outer ring SVG glow */}
-              <svg
-                className="absolute inset-0 w-full h-full"
-                viewBox="0 0 480 480"
-                fill="none"
-              >
-                <circle cx="240" cy="240" r="220" stroke="rgba(139,92,246,0.2)" strokeWidth="1" />
-                <circle cx="240" cy="240" r="140" stroke="rgba(139,92,246,0.15)" strokeWidth="1" />
-                <circle cx="240" cy="240" r="60"  stroke="rgba(139,92,246,0.25)" strokeWidth="1.5" fill="rgba(124,58,237,0.06)" />
-              </svg>
-
-              {/* Center stat */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                <div className="bg-[#12102a]/90 border border-purple-700/40 rounded-2xl px-6 py-5 text-center shadow-xl shadow-purple-900/20">
-                  <div className="text-5xl font-bold text-white leading-none">17+</div>
-                  <div className="text-gray-400 text-sm mt-1 font-medium">Platforms</div>
-                  <div className="mt-3 flex items-center gap-1.5 justify-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                    <span className="text-xs text-green-400 font-medium">Live Results</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Outer ring nodes */}
-              {OUTER_NODES.map(({ label, icon, angle }) => {
-                const currentAngle = (angle + outerAngle) % 360;
-                const { x, y } = nodePos(currentAngle, 220);
-                return (
-                  <div
-                    key={label}
-                    className="absolute flex flex-col items-center gap-1 z-20"
-                    style={{
-                      left: `calc(50% + ${x}px)`,
-                      top:  `calc(50% + ${y}px)`,
-                      transform: 'translate(-50%, -50%)',
-                    }}
-                  >
-                    <div className="w-10 h-10 bg-[#1a1040] border border-purple-600/40 rounded-xl flex items-center justify-center text-lg shadow-lg shadow-purple-900/30 hover:border-purple-400/60 transition-colors">
-                      {icon}
-                    </div>
-                    <span className="text-[9px] text-gray-500 font-medium whitespace-nowrap leading-none">{label}</span>
-                  </div>
-                );
-              })}
-
-              {/* Inner ring nodes */}
-              {INNER_NODES.map(({ label, icon, angle }) => {
-                const currentAngle = (angle + innerAngle) % 360;
-                const { x, y } = nodePos(currentAngle, 140);
-                return (
-                  <div
-                    key={label}
-                    className="absolute flex flex-col items-center gap-1 z-20"
-                    style={{
-                      left: `calc(50% + ${x}px)`,
-                      top:  `calc(50% + ${y}px)`,
-                      transform: 'translate(-50%, -50%)',
-                    }}
-                  >
-                    <div className="w-8 h-8 bg-[#12102a] border border-purple-700/30 rounded-lg flex items-center justify-center text-sm shadow-md">
-                      {icon}
-                    </div>
-                    <span className="text-[8px] text-gray-600 font-medium whitespace-nowrap leading-none">{label}</span>
-                  </div>
-                );
-              })}
-
-              {/* Floating badge */}
-              <div className="absolute bottom-6 left-0 z-30">
-                <div className="inline-flex items-center gap-2 bg-purple-900/40 border border-purple-600/40 rounded-full px-3 py-1.5 backdrop-blur-sm">
-                  <span className="w-2 h-2 rounded-full bg-purple-400" />
-                  <span className="text-xs text-purple-300 font-semibold">Live Results Table</span>
-                </div>
-              </div>
-
-              {/* Corner accent badge */}
-              <div className="absolute top-4 right-0 z-30">
-                <div className="inline-flex items-center gap-2 bg-[#0d0520]/70 border border-purple-700/30 rounded-full px-3 py-1.5 backdrop-blur-sm">
-                  <span className="text-xs text-gray-400">Dual-Browser</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                </div>
-              </div>
-
-            </div>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Link
+              href="#download"
+              className="group inline-flex items-center gap-3 rounded-full
+                         bg-black/70 px-7 py-4 text-sm font-medium tracking-[0.18em]
+                         uppercase text-white ring-1 ring-white/15
+                         transition hover:bg-black hover:ring-primary-300/60"
+            >
+              Download v2.1.0
+              <span aria-hidden className="text-primary-300 transition group-hover:translate-x-0.5">
+                →
+              </span>
+            </Link>
+            <Link
+              href="#pricing"
+              className="text-sm tracking-[0.18em] uppercase text-white/70 underline-offset-4 hover:text-primary-200 hover:underline"
+            >
+              Get a license
+            </Link>
           </div>
         </div>
       </div>
+
+      {/* ─── Stat tiles ────────────────────────────── */}
+      <div className="relative z-10 mt-16 px-6 pb-16 md:px-12 md:pb-24">
+        <div className="mx-auto grid max-w-[1280px] gap-5 md:grid-cols-3">
+          <StatTile
+            primary="3"
+            primaryClass="text-primary-300"
+            title="Source scrapers"
+            sub="Google Maps · Emails/Phones · Common Crawl"
+          />
+          <StatTile
+            primary="10k+"
+            primaryClass="text-white"
+            title="Leads per run"
+            sub="Concurrent engines · de-dup on (email, phone)"
+          />
+          <StatTile
+            primary="🤖"
+            primaryClass="text-primary-300"
+            title="Telegram remote"
+            sub="Inline-button menu · live status · CAPTCHA solve"
+          />
+        </div>
+      </div>
     </section>
+  );
+}
+
+/* ----------------------------------------------------------------------- */
+
+function NavChip({ href, label, index }) {
+  return (
+    <Link
+      href={href}
+      className="group relative inline-flex items-center text-[12px]
+                 font-medium tracking-[0.22em] text-white/85 hover:text-white"
+    >
+      {label}
+      <sup className="ml-1 -translate-y-1 text-[9px] tracking-normal text-white/45 group-hover:text-primary-300">
+        {index}
+      </sup>
+    </Link>
+  );
+}
+
+function StatTile({ primary, primaryClass = 'text-white', title, sub }) {
+  return (
+    <div className="relative overflow-hidden rounded-3xl bg-dark-card/95
+                    p-7 ring-1 ring-white/5 backdrop-blur-sm
+                    md:p-9">
+      <div className={`text-[88px] font-light leading-[0.85] tracking-tight md:text-[120px] ${primaryClass}`}>
+        {primary}
+      </div>
+      <div className="mt-3 text-sm font-medium text-white">{title}</div>
+      {sub && <div className="mt-1 text-xs text-white/55">{sub}</div>}
+    </div>
   );
 }

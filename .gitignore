@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Large binary downloads — served via GitHub Release, not git
+/public/downloads/*.zip
+/public/downloads/*.exe
